@@ -9,11 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "autoprefixer": "10.4.14",
-    "next": "13.4.6",
-    "postcss": "8.4.24",
+    "@nivo/calendar": "^0.83.0",
+    "@nivo/colors": "^0.83.0",
+    "@nivo/core": "^0.83.0",
+    "@nivo/legends": "^0.83.0",
+    "@nivo/pie": "^0.83.0",
+    "@rainbow-me/rainbowkit": "^1.0.2",
+    "autoprefixer": "^10.4.14",
+    "ethers": "^5.7.2",
+    "fs": "^0.0.1-security",
+    "next": "^13.4.5",
+    "postcss": "^8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "3.3.2"
+    "tailwindcss": "3.3.2",
+    "viem": "^1.0.7",
+    "wagmi": "^1.2.0"
   }
 }

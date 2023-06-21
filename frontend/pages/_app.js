@@ -7,12 +7,23 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygon } from "wagmi/chains";
+import { polygonMumbai } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { SWRConfig } from "swr";
 
-const { chains, publicClient } = configureChains([polygon], [publicProvider()]);
+const { chains, publicClient } = configureChains(
+  [polygonMumbai],
+  [publicProvider()]
+);
 import AppWrapper from "@/context/StateContext";
+import { LensConfig, development } from "@lens-protocol/react-web";
+import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
+import { LensProvider } from "@lens-protocol/react-web";
+
+const lensConfig = {
+  bindings: wagmiBindings(),
+  environment: development,
+};
 
 const { connectors } = getDefaultWallets({
   appName: "SuperLens",
@@ -39,16 +50,19 @@ export default function App({ Component, pageProps }) {
             overlayBlur: "small",
           })}
         >
-          <SWRConfig
-            value={{
-              fetcher: (resource, init) =>
-                fetch(resource, init).then((res) => res.json()),
-            }}
-          >
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SWRConfig>
+          {" "}
+          <LensProvider config={lensConfig}>
+            <SWRConfig
+              value={{
+                fetcher: (resource, init) =>
+                  fetch(resource, init).then((res) => res.json()),
+              }}
+            >
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </SWRConfig>
+          </LensProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </AppWrapper>

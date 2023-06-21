@@ -5,7 +5,7 @@ const nextConfig = {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
   },
-  transpilePackages: ["@nivo"],
+  transpilePackages: ["@nivo", "@nivo/calendar"],
   experimental: {
     esmExternals: "loose",
   },

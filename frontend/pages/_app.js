@@ -12,6 +12,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { SWRConfig } from "swr";
 
 const { chains, publicClient } = configureChains([polygon], [publicProvider()]);
+import AppWrapper from "@/context/StateContext";
 
 const { connectors } = getDefaultWallets({
   appName: "SuperLens",
@@ -26,21 +27,30 @@ const wagmiConfig = createConfig({
 });
 export default function App({ Component, pageProps }) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider
-        chains={chains}
-        theme={lightTheme({
-          accentColor: "#54B435",
-          accentColorForeground: "white",
-          borderRadius: "medium",
-          fontStack: "system",
-          overlayBlur: "small",
-        })}
-      >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <AppWrapper>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={lightTheme({
+            accentColor: "#54B435",
+            accentColorForeground: "white",
+            borderRadius: "large",
+            fontStack: "system",
+            overlayBlur: "small",
+          })}
+        >
+          <SWRConfig
+            value={{
+              fetcher: (resource, init) =>
+                fetch(resource, init).then((res) => res.json()),
+            }}
+          >
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </SWRConfig>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </AppWrapper>
   );
 }

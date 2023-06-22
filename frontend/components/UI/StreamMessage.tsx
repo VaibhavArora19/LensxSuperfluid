@@ -1,7 +1,7 @@
 import { RxBorderDotted } from "react-icons/rx";
 import { useEffect, useState } from "react";
 
-const StreamMessage = (props) => {
+const StreamMessage = (props: any) => {
   const [balance, setBalance] = useState(0.0465);
 
   useEffect(() => {

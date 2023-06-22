@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 
 const Navbar = () => {
@@ -32,7 +31,6 @@ const Navbar = () => {
         </div>
       </div>
       <div className="mr-12">
-            <ConnectButton label="Login" chainStatus="icon" showBalance={false}/>
       </div>
     </nav>
   );

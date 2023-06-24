@@ -1,6 +1,7 @@
 import classes from "./Intro.module.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Option from "../UI/Option";
+import { AppContext } from "@/context/StateContext";
 
 const options = [
   {
@@ -15,6 +16,11 @@ const options = [
 ];
 const Intro = () => {
   const address = "0x394B4d8d8Bf066dFbD2aBD6a705e646C29e80746";
+  const ctx = useContext(AppContext);
+
+  const modalHandler = () => {
+    ctx.sharedState.modalHandler();
+  };
 
   return (
     <>
@@ -50,12 +56,30 @@ const Intro = () => {
         </div>
       </div>
       <div className="mt-[5rem] ml-[60px] text-lg font-semibold w-[270px] flex gap-4">
-        <div className="cursor-pointer hover:bg-gray-200 w-[120px] text-center rounded-md">
+        <div
+          className="cursor-pointer hover:bg-gray-200 w-[120px] text-center rounded-md"
+          onClick={modalHandler}
+        >
           <h3>10 followers</h3>
         </div>
         <span> | </span>
-        <div className="cursor-pointer hover:bg-gray-200 w-[125px] text-center rounded-md">
+        <div
+          className="cursor-pointer hover:bg-gray-200 w-[125px] text-center rounded-md"
+          onClick={modalHandler}
+        >
           <h3>20 following</h3>
+        </div>
+      </div>
+      <div className="flex gap-2 mt-10 ml-8 w-[10px]">
+        <div>
+          <button className="bg-[#54B435] text-white rounded-lg w-[10rem] h-[3rem]">
+            Send Tokens
+          </button>
+        </div>
+        <div>
+          <button className="bg-[#54B435] text-white rounded-lg w-[10rem] h-[3rem]">
+            Give Permission
+          </button>
         </div>
       </div>
     </>

@@ -7,15 +7,34 @@ import { AppContext } from "@/context/StateContext";
 import StreamMessage from "@/components/UI/StreamMessage";
 import Modal from "@/components/Follow/Modal";
 
+import { useState } from "react";
+import { useActiveProfile } from "@lens-protocol/react-web";
+import { useEffect } from "react";
 const Profile = () => {
   const ctx = useContext(AppContext);
-  const showModal = ctx.sharedState.showModal;
+  const showModal = ctx.showModal;
+
+  const { data, error, loading } = useActiveProfile();
+  const [mounted, setMounted] = useState(false);
+  console.log(data);
+
+  useState(() => {
+    setMounted(true);
+  });
+
+  if (!mounted) return null;
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) return <p>{error.message}</p>;
+
+  if (data === null) return <p>No active profile selected</p>;
 
   return (
     <div className="mb-[1000px]">
-      <Intro />
-      {ctx.sharedState.page === "Home" ? (
-        <div className="relative bottom-[110px]">
+      <Intro data={data} />
+      {(ctx as any).page === "Home" ? (
+        <>
           <div className="ml-[1rem]">
             <Calendar />
           </div>
@@ -26,10 +45,10 @@ const Profile = () => {
             <h2 className="text-xl font-semibold ml-[1rem] mb-6">
               Super posts
             </h2>
-            <Posts />
+            <Posts id={data.id} />
           </div>
-        </div>
-      ) : ctx.sharedState.page === "On going streams" ? (
+        </>
+      ) : (ctx as any).page === "On going streams" ? (
         <div className="ml-[33.5rem] relative bottom-[110px]">
           <h2 className="font-semibold text-xl mb-6 ml-[10px]">
             Currently ongoing streams

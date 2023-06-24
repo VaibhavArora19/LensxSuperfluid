@@ -1,22 +1,34 @@
 import { useState } from "react";
 import Link from "next/link";
-import { ethers } from "ethers";
-
+import { useWalletLogin } from "@lens-protocol/react-web";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 const Navbar = () => {
   const [username, setUsername] = useState("");
-  const [address, setAddress] = useState("");
+  const {
+    execute: login,
+    error: loginError,
+    isPending: isLoginPending,
+  } = useWalletLogin();
 
-  const connectHandler = async () => {
+  const { isConnected, address } = useAccount();
+  const { disconnectAsync } = useDisconnect();
 
-    if(address.length > 0 ) return;
-    
-    const accounts = await window.ethereum?.request({method: 'eth_requestAccounts'});
+  const { connectAsync } = useConnect({
+    connector: new InjectedConnector(),
+  });
 
-    const provider = new ethers.providers.Web3Provider(window?.ethereum);
-    const signer = provider.getSigner();
-    
-    if(accounts) setAddress(accounts[0])
-    
+  const onLoginClick = async () => {
+    if (isConnected) {
+      await disconnectAsync();
+    }
+
+    const { connector } = await connectAsync();
+
+    if (connector instanceof InjectedConnector) {
+      const signer = await connector.getSigner();
+      await login(signer);
+    }
   };
 
   return (
@@ -38,15 +50,26 @@ const Navbar = () => {
         </div>
         <div className="flex gap-4 ml-2 font-semibold mt-[12px]">
           <Link href="/frens">
-            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">Frens</h3>
+            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
+              Frens
+            </h3>
           </Link>
-          <Link href="/profile">
-          <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">Profile</h3>
+          <Link href={`/profile/${address}`}>
+            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
+              Profile
+            </h3>
           </Link>
         </div>
       </div>
-      <div className="mr-12 w-32 h-10 rounded-lg font-medium text-white text-center pt-[7px] mt-[3px] bg-[#54B435]">
-        <button onClick={connectHandler}>{address.length > 0  ? address.substring(0, 3) + "..." + address.substring(38,42) : "Connect Wallet"}</button>
+
+      <div className="mr-12">
+        <button
+          className="bg-green-700 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+          disabled={isLoginPending}
+          onClick={onLoginClick}
+        >
+          Login With Lens
+        </button>
       </div>
     </nav>
   );

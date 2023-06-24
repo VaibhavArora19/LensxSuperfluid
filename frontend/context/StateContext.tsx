@@ -62,9 +62,7 @@ export const AppWrapper = ({ children }: Props): JSX.Element => {
   };
 
   return (
-    <AppContext.Provider value={{ sharedState }}>
-      {children}
-    </AppContext.Provider>
+    <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
   );
 };
 

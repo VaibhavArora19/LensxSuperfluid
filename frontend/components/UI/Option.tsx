@@ -3,19 +3,19 @@ import { TiFlowChildren, TiFlowParallel } from "react-icons/ti";
 import { useContext } from "react";
 import { AppContext } from "@/context/StateContext";
 
-const Option = ({ title }) => {
+const Option = ({ title }: any) => {
   const ctx = useContext(AppContext);
 
   const changeOptionHandler = () => {
-    if (title === ctx.sharedState.page) return;
+    if (title === ctx.page) return;
 
-    ctx.sharedState.setPageHandler(title);
+    ctx.setPageHandler(title);
   };
 
   return (
     <div
       className={`w-[155px] h-[35px] rounded-md text-center cursor-pointer hover:bg-green-100 ${
-        ctx.sharedState.page === title && "bg-green-100 text-green-800"
+        ctx.page === title && "bg-green-100 text-green-800"
       }`}
       onClick={changeOptionHandler}
     >

@@ -2,15 +2,28 @@ import InfoCard from "./InfoCard";
 import { useEffect, useState } from "react";
 import { BsDot } from "react-icons/bs";
 import classes from "./InfoCard.module.css";
+import CountUp from "react-countup";
 
-const StreamMessage = (props: any) => {
-  const [balance, setBalance] = useState(0.0465);
+type Iprops = {
+  balance: number;
+  flowRate: number;
+  time: string; ///if flowrate is per second per minute or per hour
+  sender: string;
+  receiver: string;
+  isActive: boolean;
+};
 
-  useEffect(() => {
-    // setInterval(() => {
-    //   setBalance(balance + 0.01);
-    // }, 100);
-  }, []);
+const StreamMessage = (props: Iprops) => {
+  let end = 0;
+
+  if (props.time === "second") {
+    end = 60 * 60 * 24 * 30 * props.flowRate;
+  } else if (props.time === "minute") {
+    end = 60 * 24 * 30 * props.flowRate;
+  } else if (props.time === "hour") {
+    end = 24 * 30 * props.flowRate;
+  }
+
   return (
     <div
       className={`border-2 border-solid border-gray-200 w-[90%] mt-[35px] rounded-2xl ${classes.box}`}
@@ -35,7 +48,17 @@ const StreamMessage = (props: any) => {
           <InfoCard />
         </div>
         <div className="ml-10 mt-2 font-medium text-4xl mb-6 text-gray-700">
-          {balance}
+          <CountUp
+            start={props.balance}
+            end={end}
+            duration={2592000}
+            separator=" "
+            decimals={4}
+            decimal="."
+            delay={0.1}
+            onEnd={() => console.log("Ended! 👏")}
+            onStart={() => console.log("Started! 💨")}
+          />
         </div>
       </div>
       <div className="flex gap-1 ml-24 mb-4 font-medium text-gray-500">

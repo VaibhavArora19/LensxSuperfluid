@@ -1,19 +1,19 @@
-import classes from "./InfoCard.module.css";
-import { useContext } from "react";
+import classes from "../Follow/Modal.module.css";
+import { ReactNode, useContext } from "react";
 import { AppContext } from "@/context/StateContext";
 
-const ModalCard = ({ children }) => {
+const ModalCard = ({ type }: { type: string }) => {
   const ctx = useContext(AppContext);
 
   return (
     <div
-      className={`flex gap-2 rounded-xl ${classes.shadow} w-[220px] h-[55px] items-center mb-6`}
+      className={`fixed flex top-0 w-[100%] right-0 left-0 bottom-0 z-10 items-center justify-center ${classes.modal}`}
       onClick={() => {
-        ctx.sharedState.streamModalHandler();
+        type === "stream"
+          ? ctx.streamModalHandler()
+          : ctx.permissionModalHandler();
       }}
-    >
-      <div className="bg-white w-[80%]">{children}</div>
-    </div>
+    ></div>
   );
 };
 

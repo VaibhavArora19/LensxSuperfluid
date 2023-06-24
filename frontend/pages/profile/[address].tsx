@@ -6,13 +6,17 @@ import { useContext } from "react";
 import { AppContext } from "@/context/StateContext";
 import StreamMessage from "@/components/UI/StreamMessage";
 import Modal from "@/components/Follow/Modal";
+import StreamModal from "@/components/Superfluid/StreamModal";
 
 import { useState } from "react";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import { useEffect } from "react";
+import PermissionModal from "@/components/Superfluid/PermissionModal";
 const Profile = () => {
   const ctx = useContext(AppContext);
   const showModal = ctx.showModal;
+  const showStreamModal = ctx.showStreamModal;
+  const showPermissionModal = ctx.showPermissionModal;
 
   const { data, error, loading } = useActiveProfile();
   const [mounted, setMounted] = useState(false);
@@ -34,7 +38,7 @@ const Profile = () => {
     <div className="mb-[1000px]">
       <Intro data={data} />
       {(ctx as any).page === "Home" ? (
-        <>
+        <div className="relative bottom-[110px] -z-10">
           <div className="ml-[1rem]">
             <Calendar />
           </div>
@@ -47,7 +51,7 @@ const Profile = () => {
             </h2>
             <Posts id={data.id} />
           </div>
-        </>
+        </div>
       ) : (ctx as any).page === "On going streams" ? (
         <div className="ml-[33.5rem] relative bottom-[110px]">
           <h2 className="font-semibold text-xl mb-6 ml-[10px]">
@@ -57,19 +61,25 @@ const Profile = () => {
             isActive={true}
             sender={"0xVaibhav"}
             receiver={"DineshAitham"}
-            flowRate={"100fDaix/second"}
+            flowRate={0.1}
+            balance={0}
+            time={"second"}
           />
           <StreamMessage
             isActive={true}
             sender={"0xVaibhav"}
             receiver={"DineshAitham"}
-            flowRate={"100fDaix/second"}
+            flowRate={0.001}
+            balance={0}
+            time={"second"}
           />
         </div>
       ) : (
         <></>
       )}
       {showModal && <Modal />}
+      {showStreamModal && <StreamModal />}
+      {showPermissionModal && <PermissionModal />}
     </div>
   );
 };

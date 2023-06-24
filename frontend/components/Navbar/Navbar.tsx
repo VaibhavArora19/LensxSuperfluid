@@ -64,11 +64,13 @@ const Navbar = () => {
 
       <div className="mr-12">
         <button
-          className="bg-green-700 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+          className="bg-[#54B435] hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
           disabled={isLoginPending}
           onClick={onLoginClick}
         >
-          Login With Lens
+          {!address
+            ? "Login With Lens"
+            : address.substring(0, 5) + "..." + address.substring(38, 43)}
         </button>
       </div>
     </nav>

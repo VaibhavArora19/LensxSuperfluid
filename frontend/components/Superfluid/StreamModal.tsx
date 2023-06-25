@@ -25,6 +25,7 @@ const InputForm = () => {
 
     if (!address) return;
 
+    //change receiver address later
     createFlow(address, "receiver lens address", formattedFlowRate.toString());
   };
 

@@ -1,13 +1,47 @@
 import ModalCard from "../UI/ModalCard";
 import { TbLockAccess } from "react-icons/tb";
 import { useRef, useState } from "react";
+import {
+  authorizeFullControl,
+  revokeFullControl,
+  createOrRevokePermission,
+} from "./SuperfluidSDK";
+import { permissions } from "@/lib/constants";
 
 const InputForm = () => {
   const [permission, setPermission] = useState("");
   const [timePeriod, setTimePeriod] = useState("");
   const flowRateRef = useRef<HTMLInputElement>(null);
 
-  const formSubmitHandler = async () => {};
+  const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    let formattedFlowRate = Number(flowRateRef.current?.value);
+
+    if (timePeriod === "/minute") {
+      formattedFlowRate /= 60;
+    } else if (timePeriod === "/hour") {
+      formattedFlowRate /= 60 * 60;
+    } else if (timePeriod === "/day") {
+      formattedFlowRate /= 24 * 60 * 60;
+    } else if (timePeriod === "/month") {
+      formattedFlowRate /= 30 * 24 * 60 * 60;
+    }
+
+    if (permission === "Grant Full Control") {
+      await authorizeFullControl("lens user address goes here");
+    } else if (permission === "Revoke Full Control") {
+      await revokeFullControl("lens user address goes here");
+    } else {
+      //@ts-ignore
+      const permissionValue = permissions[permission];
+
+      await createOrRevokePermission(
+        formattedFlowRate.toString(),
+        "lens user address goes here",
+        Number(permissionValue)
+      );
+    }
+  };
 
   return (
     <div className="w-[40%] h-[75%] bg-white rounded-xl fixed top-[10%] right-0 left-[30%] bottom-0 z-20">

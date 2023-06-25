@@ -1,3 +1,24 @@
+export const permissions = {
+	"Create": 1,
+	"Update": 2,
+	"Create or Update":3,
+	"Delete":4,
+	"Create or Delete": 5,
+	"Delete or Update": 6,
+	"Create Update or Delete": 7
+};
+
+
+export const reversePermissions = {
+	"1": "Create",
+	"2": "Update",
+	"3": "Create or Update",
+	"4": "Delete",
+	"5": "Create or Delete",
+	"6": "Delete or Update",
+	"7": "Create Update or Delete"
+};
+
 export const data = [
   {
     value: 289,

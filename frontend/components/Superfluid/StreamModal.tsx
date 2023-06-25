@@ -1,7 +1,33 @@
 import ModalCard from "../UI/ModalCard";
 import { LuWorkflow } from "react-icons/lu";
+import { useRef, useState } from "react";
+import { createFlow } from "./SuperfluidSDK";
+import { useAccount } from "wagmi";
 
 const InputForm = () => {
+  const flowRateRef = useRef<HTMLInputElement>(null);
+  const [timePeriod, setTimePeriod] = useState("");
+  const { address } = useAccount();
+
+  const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    let formattedFlowRate = Number(flowRateRef.current?.value);
+
+    if (timePeriod === "/minute") {
+      formattedFlowRate /= 60;
+    } else if (timePeriod === "/hour") {
+      formattedFlowRate /= 60 * 60;
+    } else if (timePeriod === "/day") {
+      formattedFlowRate /= 24 * 60 * 60;
+    } else if (timePeriod === "/month") {
+      formattedFlowRate /= 30 * 24 * 60 * 60;
+    }
+
+    if (!address) return;
+
+    createFlow(address, "receiver lens address", formattedFlowRate.toString());
+  };
+
   return (
     <div className="w-[40%] h-[75%] bg-white rounded-xl fixed top-[10%] right-0 left-[30%] bottom-0 z-20">
       <div
@@ -16,7 +42,7 @@ const InputForm = () => {
         </h1>
       </div>
       <div className="pl-6 overflow-hidden">
-        <form className="mt-10 w-full ml-6 h-full">
+        <form className="mt-10 w-full ml-6 h-full" onSubmit={formSubmitHandler}>
           <div className="ml-6">
             <label className="block">
               <span className="text-lg font-medium">Receiver</span>
@@ -48,8 +74,14 @@ const InputForm = () => {
               type="text"
               placeholder="Flow Rate"
               className="w-[65%] h-[47px] pl-2 border-2 border-solid outline-none focus:border-green-400 border-gray-300 rounded-lg"
+              ref={flowRateRef}
             />
-            <select className="h-[47px] rounded-lg focus:border-green-400 border-gray-30  border-2 ml-2 border-solid outline-none">
+            <select
+              className="h-[47px] rounded-lg focus:border-green-400 border-gray-30  border-2 ml-2 border-solid outline-none"
+              onChange={(e) => {
+                setTimePeriod(e.target.value);
+              }}
+            >
               <option value="second">/second</option>
               <option value="minute">/minute</option>
               <option value="hour">/hour</option>
@@ -57,7 +89,10 @@ const InputForm = () => {
               <option value="month">/month</option>
             </select>
           </div>
-          <button className="bg-[#54B435] rounded-lg mt-10 text-white h-12 w-[77%] ml-6">
+          <button
+            className="bg-[#54B435] rounded-lg mt-10 text-white h-12 w-[77%] ml-6"
+            type="submit"
+          >
             Start Streaming
           </button>
         </form>

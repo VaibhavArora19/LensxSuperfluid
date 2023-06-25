@@ -58,7 +58,7 @@ const Posts = ({ id }: any) => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 ml-12 text-[17px] font-medium text-gray-800 mb-8">
+                <div className="mt-8 ml-20 text-[17px] font-medium text-gray-800 mb-8">
                   <p>{(pub as any).metadata.content}</p>
                   {(pub as any).metadata.media.length > 0 &&
                     (pub as any).metadata.media.map((media: any) => {

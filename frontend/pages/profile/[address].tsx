@@ -7,6 +7,7 @@ import { AppContext } from "@/context/StateContext";
 import StreamMessage from "@/components/UI/StreamMessage";
 import Modal from "@/components/Follow/Modal";
 import StreamModal from "@/components/Superfluid/StreamModal";
+import AchievementCard from "@/components/UI/AchievementCard";
 
 import { useState } from "react";
 import { useActiveProfile } from "@lens-protocol/react-web";
@@ -42,14 +43,23 @@ const Profile = () => {
           <div className="ml-[1rem]">
             <Calendar />
           </div>
-          <div className="ml-[32rem]">
+          {/* <div className="ml-[32rem]">
             <StreamBar />
-          </div>
-          <div className="ml-[32rem] mt-[4rem]">
+          </div> */}
+          <div className="ml-[32rem] mt-[2rem]">
             <h2 className="text-xl font-semibold ml-[1rem] mb-6">
               Super posts
             </h2>
             <Posts id={data.id} />
+          </div>
+          <div className="ml-[32rem] mt-[4rem]">
+            <h2 className="text-xl font-semibold ml-[1rem] mb-6">
+              Achievements
+            </h2>
+            <div className="grid grid-cols-2">
+              <AchievementCard />
+              <AchievementCard />
+            </div>
           </div>
         </div>
       ) : (ctx as any).page === "On going streams" ? (

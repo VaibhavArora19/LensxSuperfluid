@@ -16,6 +16,7 @@
     "@nivo/core": "^0.83.0",
     "@nivo/legends": "^0.83.0",
     "@nivo/pie": "^0.83.0",
+    "@superfluid-finance/sdk-core": "^0.6.6",
     "autoprefixer": "^10.4.14",
     "ethers": "^5.7.2",
     "fs": "^0.0.1-security",

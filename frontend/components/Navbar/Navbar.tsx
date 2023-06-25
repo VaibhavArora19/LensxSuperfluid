@@ -49,11 +49,11 @@ const Navbar = () => {
           />
         </div>
         <div className="flex gap-4 ml-2 font-semibold mt-[12px]">
-          <Link href="/frens">
-            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
-              Frens
+          {/* <Link href="/stream">
+            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-28 text-center">
+              Send Tokens
             </h3>
-          </Link>
+          </Link> */}
           <Link href={`/profile/${address}`}>
             <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
               Profile

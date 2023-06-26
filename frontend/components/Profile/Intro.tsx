@@ -22,10 +22,6 @@ const Intro = ({ data }: any) => {
   const ctx = useContext(AppContext);
   const currentAddress = useAccount().address;
 
-  const modalHandler = () => {
-    ctx.modalHandler();
-  };
-
   const showStreamModalHandler = () => {
     ctx.streamModalHandler();
   };
@@ -78,14 +74,18 @@ const Intro = ({ data }: any) => {
       <div className="mt-[5rem] ml-[60px] text-lg font-semibold w-[270px] flex gap-4">
         <div
           className="cursor-pointer hover:bg-gray-200 w-[120px] text-center rounded-md"
-          onClick={modalHandler}
+          onClick={() => {
+            ctx.followModalHandler();
+          }}
         >
           <h3>{data.stats.totalFollowers} followers</h3>
         </div>
         <span> | </span>
         <div
           className="cursor-pointer hover:bg-gray-200 w-[125px] text-center rounded-md"
-          onClick={modalHandler}
+          onClick={() => {
+            ctx.unfollowModalHandler();
+          }}
         >
           <h3>{data.stats.totalFollowing} following</h3>
         </div>

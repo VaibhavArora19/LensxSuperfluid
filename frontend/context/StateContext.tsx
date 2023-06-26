@@ -2,21 +2,25 @@ import { ReactNode, createContext, useState } from "react";
 
 type ISharedState = {
   page: string;
-  showModal: boolean;
+  followModal: boolean;
+  unfollowModal: boolean;
   showStreamModal: boolean;
   showPermissionModal: boolean;
   streamModalHandler: () => void;
   permissionModalHandler: () => void;
-  modalHandler: () => void;
+  followModalHandler: () => void;
+  unfollowModalHandler: () => void;
   setPageHandler: (pageName: string) => void;
 };
 
 const defaultValues: ISharedState = {
   page: "",
-  showModal: false,
+  followModal: false,
+  unfollowModal: false,
   showStreamModal: false,
   showPermissionModal: false,
-  modalHandler: () => {},
+  followModalHandler: () => {},
+  unfollowModalHandler: () => {},
   streamModalHandler: () => {},
   permissionModalHandler: () => {},
   setPageHandler: (pageName: string) => {},
@@ -30,7 +34,8 @@ type Props = {
 
 export const AppWrapper = ({ children }: Props): JSX.Element => {
   const [page, setPage] = useState("Home");
-  const [showModal, setShowModal] = useState(false);
+  const [followModal, setFollowModal] = useState(false);
+  const [unfollowModal, setUnfollowModal] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
 
@@ -38,8 +43,11 @@ export const AppWrapper = ({ children }: Props): JSX.Element => {
     setPage(pageName);
   };
 
-  const modalHandler = () => {
-    setShowModal(!showModal);
+  const followModalHandler = () => {
+    setFollowModal(!followModal);
+  };
+  const unfollowModalHandler = () => {
+    setUnfollowModal(!unfollowModal);
   };
 
   const streamModalHandler = () => {
@@ -52,12 +60,14 @@ export const AppWrapper = ({ children }: Props): JSX.Element => {
 
   const sharedState: ISharedState = {
     page,
-    showModal,
+    followModal,
+    unfollowModal,
+    followModalHandler,
+    unfollowModalHandler,
     showStreamModal,
     showPermissionModal,
     streamModalHandler,
     permissionModalHandler,
-    modalHandler,
     setPageHandler,
   };
 

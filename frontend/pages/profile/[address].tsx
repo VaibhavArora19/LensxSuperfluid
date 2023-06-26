@@ -15,7 +15,8 @@ import { useEffect } from "react";
 import PermissionModal from "@/components/Superfluid/PermissionModal";
 const Profile = () => {
   const ctx = useContext(AppContext);
-  const showModal = ctx.showModal;
+  const followModal = ctx.followModal;
+  const unfollowModal = ctx.unfollowModal;
   const showStreamModal = ctx.showStreamModal;
   const showPermissionModal = ctx.showPermissionModal;
 
@@ -87,7 +88,8 @@ const Profile = () => {
       ) : (
         <></>
       )}
-      {showModal && <Modal />}
+      {followModal && <Modal />}
+      {unfollowModal && <Modal />}
       {showStreamModal && <StreamModal />}
       {showPermissionModal && <PermissionModal />}
     </div>

@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useWalletLogin } from "@lens-protocol/react-web";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 const Navbar = () => {
   const [username, setUsername] = useState("");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const {
     execute: login,
     error: loginError,
@@ -30,6 +35,8 @@ const Navbar = () => {
       await login(signer);
     }
   };
+
+  if (!mounted) return null;
 
   return (
     <nav className="flex justify-between mt-6 border-b-2 border-solid">

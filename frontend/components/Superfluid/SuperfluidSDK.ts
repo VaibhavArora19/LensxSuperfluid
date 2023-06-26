@@ -31,6 +31,59 @@ export const createFlow = async (
   }
 };
 
+export const updateFlow = async (sender: string, receiver: string, flowRate: string) => {
+    //@ts-ignore
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  try {
+    const sf = await Framework.create({
+      chainId: 80001,
+      provider: provider,
+    });
+
+    const DAIxContract = await sf.loadSuperToken("fDAIx");
+    const DAIx = DAIxContract.address;
+    
+    const flowOp = DAIxContract.updateFlow({
+      sender,
+      receiver,
+      flowRate,
+    });
+
+    await flowOp.exec(signer);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteFlow = async (sender: string, receiver: string) => {
+      //@ts-ignore
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  try {
+    const sf = await Framework.create({
+      chainId: 80001,
+      provider: provider,
+    });
+
+    const DAIxContract = await sf.loadSuperToken("fDAIx");
+    const DAIx = DAIxContract.address;
+    
+    const flowOp = DAIxContract.deleteFlow({
+      sender,
+      receiver,
+    });
+
+    await flowOp.exec(signer);
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export const authorizeFullControl = async (operator: string) => {
   //@ts-ignore
   const provider = new ethers.providers.Web3Provider(window.ethereum);

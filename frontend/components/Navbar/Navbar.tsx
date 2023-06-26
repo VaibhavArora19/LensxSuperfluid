@@ -66,6 +66,11 @@ const Navbar = () => {
               Profile
             </h3>
           </Link>
+          <Link href="/stream">
+            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
+              Stream
+            </h3>
+          </Link>
         </div>
       </div>
 

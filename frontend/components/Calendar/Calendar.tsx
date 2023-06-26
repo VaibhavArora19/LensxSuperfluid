@@ -7,7 +7,7 @@ const Calendar = () => {
       <h1 className="ml-[32rem] font-semibold text-xl">
         You streamed for a total of 35 times
       </h1>
-      <div className="h-[12.5rem] ml-[11rem] mt-2 w-[100%]">
+      <div className="h-[12.5rem] ml-[11rem] mt-2 w-[95rem]">
         <ResponsiveCalendar
           data={data}
           from={"2015-03-01"}

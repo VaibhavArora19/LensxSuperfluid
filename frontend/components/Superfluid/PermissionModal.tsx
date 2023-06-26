@@ -7,10 +7,13 @@ import {
   createOrRevokePermission,
 } from "./SuperfluidSDK";
 import { permissions } from "@/lib/constants";
+import { nameToAddress } from "../lens/utils";
 
 const InputForm = () => {
   const [permission, setPermission] = useState("");
   const [timePeriod, setTimePeriod] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+
   const flowRateRef = useRef<HTMLInputElement>(null);
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,20 +30,28 @@ const InputForm = () => {
       formattedFlowRate /= 30 * 24 * 60 * 60;
     }
 
-    if (permission === "Grant Full Control") {
-      await authorizeFullControl("lens user address goes here");
-    } else if (permission === "Revoke Full Control") {
-      await revokeFullControl("lens user address goes here");
+    if (receiverAddress == "") return;
+
+    if (permission === "grantFullControl") {
+      await authorizeFullControl(receiverAddress);
+    } else if (permission === "revokeFullControl") {
+      await revokeFullControl(receiverAddress);
     } else {
+      console.log(permission);
       //@ts-ignore
       const permissionValue = permissions[permission];
+      console.log(permissionValue);
 
       await createOrRevokePermission(
         formattedFlowRate.toString(),
-        "lens user address goes here",
+        receiverAddress,
         Number(permissionValue)
       );
     }
+  };
+  const handleReceiverAddress = async (e: any) => {
+    const address = await nameToAddress(e.target.value);
+    setReceiverAddress(address as any);
   };
 
   return (
@@ -64,10 +75,12 @@ const InputForm = () => {
           <input
             type="text"
             placeholder="Operator address"
-            value={"Resolved operator address from lens"}
             className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-            disabled
+            onChange={handleReceiverAddress}
           />
+          {receiverAddress != "" && (
+            <p className="text-sm text-gray-500 mt-2 ml-2">{receiverAddress}</p>
+          )}
         </div>
         <div className="ml-6 mt-6">
           <label className="block">
@@ -82,9 +95,9 @@ const InputForm = () => {
             <option disabled selected>
               Permission
             </option>
-            <option value="create">Create</option>
-            <option value="update">Update</option>
-            <option value="delete">Delete</option>
+            <option value="Create">Create</option>
+            <option value="Update">Update</option>
+            <option value="Delete">Delete</option>
             <option value="grantFullControl">Grant Full Control</option>
             <option value="revokeFullControl">Revoke Full Control</option>
           </select>

@@ -3,10 +3,11 @@ import { LuWorkflow } from "react-icons/lu";
 import { useRef, useState } from "react";
 import { createFlow } from "./SuperfluidSDK";
 import { useAccount } from "wagmi";
-
+import { nameToAddress } from "../lens/utils";
 const InputForm = () => {
   const flowRateRef = useRef<HTMLInputElement>(null);
   const [timePeriod, setTimePeriod] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
   const { address } = useAccount();
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,9 +25,15 @@ const InputForm = () => {
     }
 
     if (!address) return;
+    if (receiverAddress == "") return;
 
     //change receiver address later
-    createFlow(address, "receiver lens address", formattedFlowRate.toString());
+    createFlow(address, receiverAddress, formattedFlowRate.toString());
+  };
+
+  const handleReceiverAddress = async (e: any) => {
+    const address = await nameToAddress(e.target.value);
+    setReceiverAddress(address as any);
   };
 
   return (
@@ -51,10 +58,17 @@ const InputForm = () => {
             <input
               type="text"
               placeholder="lens name"
-              value={"lens name goes here"}
               className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-              disabled
+              id="handle"
+              onChange={(e) => {
+                handleReceiverAddress(e);
+              }}
             />
+            {receiverAddress != "" && (
+              <p className="text-sm text-gray-500 mt-2 ml-2">
+                {receiverAddress}
+              </p>
+            )}
           </div>
           <div className="ml-6 mt-6">
             <label className="block">

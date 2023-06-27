@@ -20,3 +20,11 @@ export const addressToName = async (address: string) => {
   const defaultProfile = allOwnedProfiles.items[0];
   return defaultProfile.handle;
 };
+
+export const getProfile = async (name: string) => {
+  const profileByHandle = await lensClient.profile.fetch({
+    handle: name + ".test",
+  });
+
+  return profileByHandle
+}

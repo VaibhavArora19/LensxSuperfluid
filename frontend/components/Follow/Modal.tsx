@@ -46,8 +46,12 @@ const FollowModal = () => {
             <div className="flex items-center gap-1">
               <div className="mt-2">
                 {(profile.picture as any).original.url ? (
-                  <IpfsImage
-                    hash={(profile.picture as any).original.url}
+                  // <IpfsImage
+                  //   hash={(profile.picture as any).original.url}
+                  //   className="w-8 rounded-full"
+                  // />
+                  <img
+                    src={profile.picture.original.url}
                     className="w-8 rounded-full"
                   />
                 ) : (

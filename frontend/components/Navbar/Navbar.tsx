@@ -3,12 +3,29 @@ import Link from "next/link";
 import { useWalletLogin } from "@lens-protocol/react-web";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import { getProfile } from "../lens/utils";
+import { useRouter } from "next/router";
 const Navbar = () => {
   const [username, setUsername] = useState("");
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const [profile, setProfile] = useState<any>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    async function getProfileInfo() {
+      const profileInfo = await getProfile(username);
+
+      if (profileInfo !== null) {
+        setProfile(profileInfo);
+      }
+    }
+
+    getProfileInfo();
+  }, [username]);
 
   const {
     execute: login,
@@ -45,15 +62,41 @@ const Navbar = () => {
           <h1 className="text-3xl cursor-pointer font-bold">Superlens</h1>
         </Link>
         <div>
-          <input
-            type="text"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            value={username}
-            placeholder="Search..."
-            className="mt-1 ml-2 h-[2.2rem] w-[15rem] text-black pl-4 border-2 border-solid focus:outline-none focus:border-green-400 rounded-md"
-          />
+          <div>
+            <input
+              type="text"
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              value={username}
+              placeholder="Search..."
+              className="mt-1 ml-2 h-[2.2rem] w-[15rem] text-black pl-4 border-2 border-solid focus:outline-none focus:border-green-400 rounded-md"
+            />
+          </div>
+          {profile !== null && (
+            <div
+              className="z-50 absolute bg-white pt-2 ml-2 border-b-2 border-r-2 border-l-2 w-[240px] border-solid border-gray-300 rounded-md cursor-pointer"
+              onClick={() => {
+                router.push(`/profile/${profile?.ownedBy}`);
+              }}
+            >
+              <div className="flex gap-2 mt-[2px] mb-[4px]">
+                <img
+                  src={profile?.picture?.original?.url}
+                  className="w-8 h-8 ml-2 rounded-full"
+                  alt="profile picture of user"
+                />
+                <div>
+                  <h4 className="text-sm font-medium">{profile?.handle}</h4>
+                  <h4 className="ml-[2px] text-[13px] font-medium">
+                    {profile?.ownedBy.substring(0, 5) +
+                      "..." +
+                      profile.ownedBy.substring(38, 43)}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex gap-4 ml-2 font-semibold mt-[12px]">
           {/* <Link href="/stream">

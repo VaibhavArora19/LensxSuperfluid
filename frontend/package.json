@@ -35,6 +35,9 @@
     "viem": "^1.0.7",
     "wagmi": "^0.12.7"
   },
+  "resolutions": {
+    "react-countup/countup.js": "2.5.0"
+  },
   "devDependencies": {
     "@types/node": "^20.3.1",
     "@types/react": "^18.2.13",

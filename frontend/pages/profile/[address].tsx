@@ -1,3 +1,5 @@
+"use client";
+
 import Calendar from "@/components/Calendar/Calendar";
 import Intro from "@/components/Profile/Intro";
 import Posts from "@/components/UI/Posts";

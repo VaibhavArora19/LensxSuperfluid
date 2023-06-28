@@ -8,11 +8,14 @@ const InputForm = () => {
   const flowRateRef = useRef<HTMLInputElement>(null);
   const [timePeriod, setTimePeriod] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const { address } = useAccount();
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let formattedFlowRate = Number(flowRateRef.current?.value);
+
+    setIsProcessing(true);
 
     if (timePeriod === "/minute") {
       formattedFlowRate /= 60;
@@ -28,7 +31,8 @@ const InputForm = () => {
     if (receiverAddress == "") return;
 
     //change receiver address later
-    createFlow(address, receiverAddress, formattedFlowRate.toString());
+    await createFlow(address, receiverAddress, formattedFlowRate.toString());
+    setIsProcessing(true);
   };
 
   const handleReceiverAddress = async (e: any) => {
@@ -66,7 +70,9 @@ const InputForm = () => {
             />
             {receiverAddress != "" && (
               <p className="text-sm text-gray-500 mt-2 ml-2">
-                {receiverAddress}
+                {receiverAddress.substring(0, 7) +
+                  "..." +
+                  receiverAddress.substring(37, 43)}
               </p>
             )}
           </div>
@@ -78,7 +84,7 @@ const InputForm = () => {
               type="text"
               placeholder="fDAIx"
               disabled
-              className="w-[80%] h-[47px] pl-2 border-2 border-solid border-gray-300 rounded-lg"
+              className="w-[80%] h-[47px] cursor-not-allowed pl-2 border-2 border-solid border-gray-300 rounded-lg"
             />
           </div>
           <div className="ml-6 mt-6">
@@ -108,7 +114,7 @@ const InputForm = () => {
             className="bg-[#54B435] rounded-lg mt-10 text-white h-12 w-[77%] ml-6"
             type="submit"
           >
-            Start Streaming
+            {isProcessing ? "Starting stream..." : "Start Streaming"}
           </button>
         </form>
       </div>

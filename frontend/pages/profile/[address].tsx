@@ -94,14 +94,13 @@ const Profile = () => {
       });
 
       sortedStreams.sort((a, b) => b.createdAtTimestamp - a.createdAtTimestamp);
-
       const activeStreamsData = sortedStreams.filter(
         (stream) => stream.currentFlowRate != 0
       );
       setAllStreams(sortedStreams);
       setActiveStreams(activeStreamsData);
     }
-  }, [result1.data, result2.data]);
+  }, []);
 
   if (!mounted) return null;
 

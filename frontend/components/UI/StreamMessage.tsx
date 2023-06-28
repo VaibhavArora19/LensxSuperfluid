@@ -1,8 +1,9 @@
 import InfoCard from "./InfoCard";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { BsDot } from "react-icons/bs";
 import classes from "./InfoCard.module.css";
-import CountUp from "react-countup";
+
+const CountUp = dynamic(() => import("react-countup"), { ssr: false });
 
 type Iprops = {
   balance: number;

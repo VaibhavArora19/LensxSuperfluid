@@ -3,32 +3,105 @@
 import Calendar from "@/components/Calendar/Calendar";
 import Intro from "@/components/Profile/Intro";
 import Posts from "@/components/UI/Posts";
-import StreamBar from "@/components/UI/StreamBar";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { gql, useQuery } from "urql";
 import { AppContext } from "@/context/StateContext";
 import StreamMessage from "@/components/UI/StreamMessage";
 import Modal from "@/components/Follow/Modal";
 import StreamModal from "@/components/Superfluid/StreamModal";
 import AchievementCard from "@/components/UI/AchievementCard";
-
+import { useAccount } from "wagmi";
 import { useState } from "react";
 import { useActiveProfile } from "@lens-protocol/react-web";
-import { useEffect } from "react";
 import PermissionModal from "@/components/Superfluid/PermissionModal";
+import { ethers } from "ethers";
+
+const sendingStreamsQuery = gql`
+  query sendingStreamsQuery($sender: ID = "") {
+    streams(where: { sender: $sender }) {
+      currentFlowRate
+      receiver {
+        id
+      }
+      createdAtTimestamp
+      token {
+        name
+        symbol
+      }
+      streamedUntilUpdatedAt
+    }
+  }
+`;
+
+///formula to get total amount streamed till now is -> streamedUntilUpdatedAt + ((currentTime in seconds) - updatedAtTimestamp) * currentFlowRate
+
+const receivingStreamsQuery = gql`
+  query ($receiver: ID = "") {
+    streams(where: { receiver: $receiver }) {
+      currentFlowRate
+      receiver {
+        id
+      }
+      sender {
+        id
+      }
+      token {
+        name
+        symbol
+      }
+      createdAtTimestamp
+      streamedUntilUpdatedAt
+    }
+  }
+`;
+
 const Profile = () => {
+  const [allStreams, setAllStreams] = useState<any>([]);
+  const [activeStreams, setActiveStreams] = useState<any>([]);
   const ctx = useContext(AppContext);
   const followModal = ctx.followModal;
   const unfollowModal = ctx.unfollowModal;
   const showStreamModal = ctx.showStreamModal;
   const showPermissionModal = ctx.showPermissionModal;
-
+  const { address } = useAccount();
   const { data, error, loading } = useActiveProfile();
   const [mounted, setMounted] = useState(false);
-  console.log(data);
-
   useState(() => {
     setMounted(true);
   });
+  const sender = address?.toLowerCase();
+  const receiver = address?.toLowerCase();
+  const [result1] = useQuery({
+    query: sendingStreamsQuery,
+    variables: { sender },
+  });
+  const [result2] = useQuery({
+    query: receivingStreamsQuery,
+    variables: { receiver },
+  });
+
+  useEffect(() => {
+    if (result1.data !== undefined && result2.data !== undefined) {
+      let sortedStreams = [...result1.data.streams, ...result2.data.streams];
+
+      sortedStreams.forEach((stream) => {
+        stream.totalFlow =
+          stream.streamedUntilUpdatedAt +
+          (Date.now() / 1000 - stream.createdAtTimestamp) *
+            Number(
+              ethers.utils.formatUnits(stream.currentFlowRate, 18).toString()
+            );
+      });
+
+      sortedStreams.sort((a, b) => b.createdAtTimestamp - a.createdAtTimestamp);
+
+      const activeStreamsData = sortedStreams.filter(
+        (stream) => stream.currentFlowRate != 0
+      );
+      setAllStreams(sortedStreams);
+      setActiveStreams(activeStreamsData);
+    }
+  }, [result1.data, result2.data]);
 
   if (!mounted) return null;
 
@@ -70,25 +143,43 @@ const Profile = () => {
           <h2 className="font-semibold text-xl mb-6 ml-[10px]">
             Currently ongoing streams
           </h2>
-          <StreamMessage
-            isActive={true}
-            sender={"0xVaibhav"}
-            receiver={"DineshAitham"}
-            flowRate={0.1}
-            balance={0}
-            time={"second"}
-          />
-          <StreamMessage
-            isActive={true}
-            sender={"0xVaibhav"}
-            receiver={"DineshAitham"}
-            flowRate={0.001}
-            balance={0}
-            time={"second"}
-          />
+          {address &&
+            activeStreams.map((stream: any) => {
+              return (
+                <StreamMessage
+                  isActive={true}
+                  sender={address}
+                  createdAt={stream.createdAtTimestamp}
+                  receiver={stream.receiver.id}
+                  flowRate={stream.currentFlowRate}
+                  balance={stream.totalFlow}
+                  token={stream.token.symbol}
+                  streamUntilUpdatedAt={stream.streamedUntilUpdatedAt}
+                  time={"second"}
+                />
+              );
+            })}
         </div>
       ) : (
-        <></>
+        <div className="ml-[33.5rem] relative bottom-[110px]">
+          <h2 className="font-semibold text-xl mb-6 ml-[10px]">All streams</h2>
+          {address &&
+            allStreams.map((stream: any) => {
+              return (
+                <StreamMessage
+                  isActive={stream.currentFlowRate != 0 ? true : false}
+                  sender={stream?.sender?.id || address}
+                  createdAt={stream.createdAtTimestamp}
+                  receiver={stream.receiver.id}
+                  flowRate={stream.currentFlowRate}
+                  balance={stream.totalFlow}
+                  streamUntilUpdatedAt={stream.streamedUntilUpdatedAt}
+                  token={stream.token.symbol}
+                  time={"second"}
+                />
+              );
+            })}
+        </div>
       )}
       {followModal && <Modal />}
       {unfollowModal && <Modal />}

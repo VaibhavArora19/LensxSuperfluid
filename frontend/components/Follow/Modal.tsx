@@ -50,8 +50,8 @@ const FollowModal = () => {
                   //   hash={(profile.picture as any).original.url}
                   //   className="w-8 rounded-full"
                   // />
-                  <img
-                    src={profile.picture.original.url}
+                  <IpfsImage
+                    hash={profile.picture.original.url}
                     className="w-8 rounded-full"
                   />
                 ) : (
@@ -139,6 +139,8 @@ const UnfollowModal = () => {
     walletAddress: data?.ownedBy as any,
     limit: 10,
   });
+
+  console.log("data is", following);
   return (
     <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
       {following?.map((profile: any) => {
@@ -147,8 +149,8 @@ const UnfollowModal = () => {
             <div className="flex items-center gap-1">
               <div className="mt-2">
                 {(profile.profile.picture as any).original.url ? (
-                  <IpfsImage
-                    hash={(profile.profile.picture as any).original.url}
+                  <img
+                    src={(profile.profile.picture as any).original.url}
                     className="w-8 rounded-full"
                   />
                 ) : (

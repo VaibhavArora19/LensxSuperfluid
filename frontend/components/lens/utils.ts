@@ -28,3 +28,16 @@ export const getProfile = async (name: string) => {
 
   return profileByHandle
 }
+
+export const getProfileByAddress = async (address: string) => {
+  const name = await addressToName(address);
+
+  if(!name) return undefined;
+  
+   const profileByHandle = await lensClient.profile.fetch({
+    handle: name,
+  });
+
+  return profileByHandle
+
+}

@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import { useEffect } from "react";
+import { IpfsImage } from "react-ipfs-image";
 const options = [
   {
     name: "Home",
@@ -38,8 +39,8 @@ const Intro = ({ data }: any) => {
         </h1>
 
         {(data.picture as any).original.url ? (
-          <img
-            src={(data.picture as any).original.url}
+          <IpfsImage
+            hash={(data.picture as any).original.url}
             className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
           />
         ) : (

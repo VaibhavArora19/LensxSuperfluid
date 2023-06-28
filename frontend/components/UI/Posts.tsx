@@ -21,7 +21,6 @@ const Posts = ({ id }: any) => {
 
     return formattedDate;
   };
-  console.log(publication);
   return (
     <>
       {publication &&
@@ -32,8 +31,8 @@ const Posts = ({ id }: any) => {
                 <div className="flex gap-2 ml-8 mt-8 mb-8">
                   <div>
                     {(pub.profile.picture as any).original.url ? (
-                      <img
-                        src={(pub.profile.picture as any).original.url}
+                      <IpfsImage
+                        hash={(pub.profile.picture as any).original.url}
                         className="w-8 rounded-full mt-2"
                       />
                     ) : (

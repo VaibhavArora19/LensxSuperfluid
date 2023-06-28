@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { Client, Provider, cacheExchange, fetchExchange } from "urql";
 import {
   LensProvider,
   LensConfig,
@@ -31,17 +32,23 @@ const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
   environment: development,
 };
+const urqlClient = new Client({
+  url: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai",
+  exchanges: [cacheExchange, fetchExchange],
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AppWrapper>
-      <WagmiConfig client={client}>
-        <LensProvider config={lensConfig}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </LensProvider>
-      </WagmiConfig>
-    </AppWrapper>
+    <Provider value={urqlClient}>
+      <AppWrapper>
+        <WagmiConfig client={client}>
+          <LensProvider config={lensConfig}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </LensProvider>
+        </WagmiConfig>
+      </AppWrapper>
+    </Provider>
   );
 }

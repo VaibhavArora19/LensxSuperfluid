@@ -28,14 +28,15 @@ const Backdrop = () => {
 };
 
 const FollowModal = () => {
-  const { data, error } = useActiveProfile();
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
   const {
     data: followers,
     loading,
     hasMore,
     next,
   } = useProfileFollowers({
-    profileId: data?.id as any,
+    profileId: profile?.id as any,
     limit: 10,
   });
   return (
@@ -99,10 +100,11 @@ const FollowModal = () => {
 };
 
 function UnfollowProfile({ profile }: any) {
-  const { data, error } = useActiveProfile();
+  const ctx = useContext(AppContext);
+  const pro = ctx.profile;
   const { execute: unfollow, isPending } = useUnfollow({
     followee: profile,
-    follower: data,
+    follower: pro,
   } as any);
 
   if (!profile.isFollowedByMe) {
@@ -121,19 +123,17 @@ function UnfollowProfile({ profile }: any) {
 }
 
 function FollowProfile({ profile }: any) {
-  const { data, error } = useActiveProfile();
-
+  const ctx = useContext(AppContext);
+  const pro = ctx.profile;
+  console.log("profile is", profile);
+  console.log("pro is", pro);
   const { execute: follow, isPending } = useFollow({
     followee: profile,
-    follower: data,
+    follower: pro,
   } as any);
 
   if (profile.isFollowedByMe) {
     return <p>Following</p>;
-  }
-
-  if (error) {
-    return <p>{error.message}</p>;
   }
 
   return (
@@ -148,14 +148,16 @@ function FollowProfile({ profile }: any) {
 }
 
 const UnfollowModal = () => {
-  const { data, error } = useActiveProfile();
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
+
   const {
     data: following,
     loading,
     hasMore,
     next,
   } = useProfileFollowing({
-    walletAddress: data?.ownedBy as any,
+    walletAddress: profile?.ownedBy as any,
     limit: 10,
   });
 

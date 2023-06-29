@@ -2,10 +2,12 @@ import { ReactNode, createContext, useState } from "react";
 
 type ISharedState = {
   page: string;
+  profile: any;
   followModal: boolean;
   unfollowModal: boolean;
   showStreamModal: boolean;
   showPermissionModal: boolean;
+  setProfile: (profile: any) => void;
   streamModalHandler: () => void;
   permissionModalHandler: () => void;
   followModalHandler: () => void;
@@ -15,10 +17,12 @@ type ISharedState = {
 
 const defaultValues: ISharedState = {
   page: "",
+  profile: null,
   followModal: false,
   unfollowModal: false,
   showStreamModal: false,
   showPermissionModal: false,
+  setProfile: () => {},
   followModalHandler: () => {},
   unfollowModalHandler: () => {},
   streamModalHandler: () => {},
@@ -34,6 +38,7 @@ type Props = {
 
 export const AppWrapper = ({ children }: Props): JSX.Element => {
   const [page, setPage] = useState("Home");
+  const [profile, setProfile] = useState(null);
   const [followModal, setFollowModal] = useState(false);
   const [unfollowModal, setUnfollowModal] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
@@ -62,8 +67,10 @@ export const AppWrapper = ({ children }: Props): JSX.Element => {
     page,
     followModal,
     unfollowModal,
+    profile,
     followModalHandler,
     unfollowModalHandler,
+    setProfile,
     showStreamModal,
     showPermissionModal,
     streamModalHandler,

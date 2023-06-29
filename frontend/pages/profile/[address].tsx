@@ -63,6 +63,7 @@ const Profile = () => {
   const [allStreams, setAllStreams] = useState<any>([]);
   const [activeStreams, setActiveStreams] = useState<any>([]);
   const ctx = useContext(AppContext);
+  const setProfile = ctx.setProfile;
   const followModal = ctx.followModal;
   const unfollowModal = ctx.unfollowModal;
   const showStreamModal = ctx.showStreamModal;
@@ -90,6 +91,7 @@ const Profile = () => {
     const profile = await getProfileByAddress(address as any);
     console.log(profile);
     setData(profile);
+    setProfile(profile as any);
   }
 
   useEffect(() => {

@@ -43,7 +43,7 @@ const FollowModal = () => {
     limit: 10,
   });
   return (
-    <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+    <div className="w-[30%] fixed overflow-y-scroll flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
       <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
         <h2 className="pl-6 text-lg font-medium flex gap-2">
           <span className="mt-[4px] text-[#54B435]">
@@ -59,6 +59,7 @@ const FollowModal = () => {
             className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6"
             onClick={() => {
               router.push(`/profile/${profile.ownedBy}`);
+              ctx.followModalHandler();
             }}
           >
             <div className="flex items-center gap-1">
@@ -169,7 +170,7 @@ const UnfollowModal = () => {
   });
 
   return (
-    <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+    <div className="w-[30%] fixed overflow-y-scroll flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
       <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
         <h2 className="pl-6 text-lg font-medium flex gap-2">
           <span className="mt-[4px] text-[#54B435]">
@@ -184,6 +185,7 @@ const UnfollowModal = () => {
             className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6"
             onClick={() => {
               router.push(`/profile/${profile.profile.ownedBy}`);
+              ctx.unfollowModalHandler();
             }}
           >
             <div className="flex items-center gap-1">

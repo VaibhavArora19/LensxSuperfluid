@@ -47,7 +47,7 @@ const InputForm = ({ username }: { username: string }) => {
   return (
     <div className="w-[40%] h-[75%] bg-white rounded-xl fixed top-[10%] right-0 left-[30%] bottom-0 z-20">
       <div
-        className=" pl-4 pb-2
+        className=" pl-8 pb-2
        w-[100%] mt-4 border-b-2 border-solid border-gray-300 text-[20px] font-medium"
       >
         <h1 className="flex gap-2">

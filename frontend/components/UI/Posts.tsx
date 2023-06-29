@@ -25,7 +25,7 @@ const Posts = ({ id }: any) => {
     <>
       {publication &&
         publication.map((pub) => {
-          if ((pub as any).metadata.content.includes("#superfluid")) {
+          if ((pub as any)?.metadata?.content.includes("#superfluid")) {
             return (
               <div className="border-2 border-solid rounded-lg border-gray-200 w-[88%] mb-2">
                 <div className="flex gap-2 ml-8 mt-8 mb-8">

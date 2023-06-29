@@ -68,7 +68,7 @@ const InputForm = ({ username }: { username: string }) => {
   return (
     <div className="w-[40%] h-[75%] bg-white rounded-xl fixed top-[10%] right-0 left-[30%] bottom-0 z-20">
       <div
-        className=" pl-4 pb-2
+        className=" pl-8 pb-2
        w-[100%] mt-4 border-b-2 border-solid border-gray-300 text-[20px] font-medium"
       >
         <h1 className="flex gap-2">
@@ -79,7 +79,7 @@ const InputForm = ({ username }: { username: string }) => {
         </h1>
       </div>
       <form className="mt-10 w-full ml-6 h-full" onSubmit={formSubmitHandler}>
-        <div className="ml-6">
+        <div className="ml-10">
           <label className="block">
             <span className="text-lg font-medium">Operator name</span>
           </label>
@@ -98,7 +98,7 @@ const InputForm = ({ username }: { username: string }) => {
             </p>
           )}
         </div>
-        <div className="ml-6 mt-6">
+        <div className="ml-10 mt-6">
           <label className="block">
             <span className="text-lg font-medium">Permission</span>
           </label>
@@ -119,7 +119,7 @@ const InputForm = ({ username }: { username: string }) => {
           </select>
         </div>
         {permission !== "revokeFullControl" && (
-          <div className="ml-6 mt-6">
+          <div className="ml-10 mt-6">
             <label className="block">
               <span className="text-lg font-medium">Flow Rate</span>
             </label>
@@ -147,7 +147,7 @@ const InputForm = ({ username }: { username: string }) => {
           </div>
         )}
         <button
-          className="bg-[#54B435] rounded-lg mt-10 text-white h-12 w-[77%] ml-6"
+          className="bg-[#54B435] rounded-lg mt-10 text-white h-12 w-[76%] ml-10"
           type="submit"
         >
           {isProcessing ? "Setting Permission..." : "Set Permission"}

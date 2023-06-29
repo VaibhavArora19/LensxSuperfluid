@@ -1,18 +1,20 @@
 import { TiFlowParallel } from "react-icons/ti";
 import classes from "../../components/Follow/Modal.module.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   createFlow,
   updateFlow,
   deleteFlow,
 } from "@/components/Superfluid/SuperfluidSDK";
 import { useAccount } from "wagmi";
+import { nameToAddress } from "@/components/lens/utils";
 
 const Stream = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
   const flowRateRef = useRef<HTMLInputElement>(null);
   const timeRef = useRef<HTMLSelectElement>(null);
   const streamTypeRef = useRef<HTMLSelectElement>(null);
+  const [receiverAddress, setReceiverAddress] = useState("");
   const { address } = useAccount();
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -32,20 +34,28 @@ const Stream = () => {
       formattedFlowRate /= 30 * 24 * 60 * 60;
     }
 
+    if (!usernameRef?.current?.value) return;
+
+    const receiverAddress = await nameToAddress(usernameRef?.current?.value);
+
+    if (!receiverAddress) return;
+
     if (streamTypeRef?.current?.value === "create") {
-      await createFlow(
-        address,
-        "resolved lens address goes here",
-        formattedFlowRate.toString()
-      );
+      await createFlow(address, receiverAddress, formattedFlowRate.toString());
     } else if (streamTypeRef?.current?.value === "update") {
-      await updateFlow(
-        address,
-        "resolved lens address goes here",
-        formattedFlowRate.toString()
-      );
+      await updateFlow(address, receiverAddress, formattedFlowRate.toString());
     } else if (streamTypeRef?.current?.value === "delete") {
-      await deleteFlow(address, "resolved lens address goes here");
+      await deleteFlow(address, receiverAddress);
+    }
+  };
+
+  const handleReceiverAddress = async (e: any) => {
+    const address = await nameToAddress(e.target.value);
+
+    if (!address) {
+      setReceiverAddress("");
+    } else {
+      setReceiverAddress(address as any);
     }
   };
 
@@ -69,7 +79,15 @@ const Stream = () => {
             placeholder="lens username"
             className="w-[80%] h-[47px] pl-2 focus:border-green-400 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
             ref={usernameRef}
+            onChange={handleReceiverAddress}
           />
+          {receiverAddress != "" && (
+            <p className="text-sm text-gray-500 mt-2 ml-2">
+              {receiverAddress.substring(0, 7) +
+                "..." +
+                receiverAddress.substring(37, 43)}
+            </p>
+          )}
           <div className="grid grid-cols-2">
             <div className="mt-6">
               <label className="block">

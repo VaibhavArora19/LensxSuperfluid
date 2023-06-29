@@ -65,6 +65,7 @@ const Profile = () => {
   const showPermissionModal = ctx.showPermissionModal;
   const { address } = useAccount();
   const { data, error, loading } = useActiveProfile();
+  const [mostStreamed, setMostStreamed] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
   useState(() => {
     setMounted(true);
@@ -92,15 +93,24 @@ const Profile = () => {
               ethers.utils.formatUnits(stream.currentFlowRate, 18).toString()
             );
       });
-
       sortedStreams.sort((a, b) => b.createdAtTimestamp - a.createdAtTimestamp);
       const activeStreamsData = sortedStreams.filter(
         (stream) => stream.currentFlowRate != 0
       );
+
+      let streamed;
+      let flowRate = 0;
+      for (const stream of sortedStreams) {
+        if (stream.streamedUntilUpdatedAt > flowRate) {
+          streamed = stream;
+          flowRate = stream.streamedUntilUpdatedAt;
+        }
+      }
+      setMostStreamed(streamed);
       setAllStreams(sortedStreams);
       setActiveStreams(activeStreamsData);
     }
-  }, []);
+  }, [result1.data, result2.data]);
 
   if (!mounted) return null;
 
@@ -111,12 +121,12 @@ const Profile = () => {
   if (data === null) return <p>No active profile selected</p>;
 
   return (
-    <div className="mb-[1000px]">
+    <div className="mb-[10px]">
       <Intro data={data} />
       {(ctx as any).page === "Home" ? (
         <div className="relative bottom-[110px] -z-10">
           <div className="ml-[1rem]">
-            <Calendar />
+            {allStreams.length > 0 && <Calendar data={allStreams} />}
           </div>
           {/* <div className="ml-[32rem]">
             <StreamBar />
@@ -127,21 +137,38 @@ const Profile = () => {
             </h2>
             <Posts id={data.id} />
           </div>
-          <div className="ml-[32rem] mt-[4rem]">
-            <h2 className="text-xl font-semibold ml-[1rem] mb-6">
-              Achievements
-            </h2>
-            <div className="grid grid-cols-2">
-              <AchievementCard />
-              <AchievementCard />
+          {allStreams.length > 0 && (
+            <div className="ml-[32rem] mt-[4rem]">
+              <h2 className="text-xl font-semibold ml-[1rem] mb-6">
+                Achievements
+              </h2>
+              <div className="grid grid-cols-2">
+                <AchievementCard
+                  title="First superfluid stream"
+                  date={allStreams[allStreams.length - 1].createdAtTimestamp}
+                  token={allStreams[allStreams.length - 1].token.symbol}
+                  streamed={
+                    allStreams[allStreams.length - 1].streamedUntilUpdatedAt
+                  }
+                />
+                <AchievementCard
+                  title="Most streamed"
+                  date={mostStreamed.createdAtTimestamp}
+                  token={mostStreamed.token.symbol}
+                  streamed={mostStreamed.streamedUntilUpdatedAt}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ) : (ctx as any).page === "On going streams" ? (
         <div className="ml-[33.5rem] relative bottom-[110px]">
           <h2 className="font-semibold text-xl mb-6 ml-[10px]">
             Currently ongoing streams
           </h2>
+          {activeStreams.length === 0 && (
+            <h3 className="mt-[10px] ml-[15px] text-xl">No active streams!!</h3>
+          )}
           {address &&
             activeStreams.map((stream: any) => {
               return (

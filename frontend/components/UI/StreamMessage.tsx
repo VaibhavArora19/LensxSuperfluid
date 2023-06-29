@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import { BsDot } from "react-icons/bs";
 import classes from "./InfoCard.module.css";
 import { ethers } from "ethers";
+import { useAccount } from "wagmi";
+import { deleteFlow } from "../Superfluid/SuperfluidSDK";
 
 const CountUp = dynamic(() => import("react-countup"), { ssr: false });
 
@@ -19,6 +21,7 @@ type Iprops = {
 };
 
 const StreamMessage = (props: Iprops) => {
+  const { address } = useAccount();
   var d = new Date(Number(props.createdAt) * 1000); // The 0 there is the key, which sets the date to the epoch
   let time = d.toString();
 
@@ -41,6 +44,12 @@ const StreamMessage = (props: Iprops) => {
     end =
       24 * 30 * Number(ethers.utils.formatUnits(props.flowRate, 18).toString());
   }
+
+  const cancelStreamHandler = async () => {
+    if (!address) return;
+
+    await deleteFlow(address, props.receiver);
+  };
 
   return (
     <div
@@ -104,6 +113,20 @@ const StreamMessage = (props: Iprops) => {
             .substring(0, 8)}
           /sec
         </h3>
+        {props.isActive &&
+          address?.toLowerCase() === props.sender.toLowerCase() && (
+            <>
+              <span className="pt-[5px]">
+                <BsDot />
+              </span>
+              <h3
+                className="text-red-600 cursor-pointer"
+                onClick={cancelStreamHandler}
+              >
+                Cancel Stream
+              </h3>
+            </>
+          )}
       </div>
     </div>
   );

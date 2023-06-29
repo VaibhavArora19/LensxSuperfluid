@@ -1,6 +1,7 @@
 import { BsDot } from "react-icons/bs";
+import { ethers } from "ethers";
 
-const AchievementCard = () => {
+const AchievementCard = (props: any) => {
   return (
     <div className="border-2 border-solid rounded-lg border-gray-200 w-[78%] mb-2">
       <div className="flex justify-between">
@@ -17,9 +18,11 @@ const AchievementCard = () => {
           </div>
           <div className="ml-4">
             <h2 className="font-medium text-green-600 text-lg">
-              First superfluid stream
+              {props.title}
             </h2>
-            <h3 className="font-medium text-gray-600">24 June 2023</h3>
+            <h3 className="font-medium text-gray-600">
+              {new Date(props.date * 1000).toDateString()}
+            </h3>
           </div>
         </div>
         <div className="mt-[33px] mr-[14px] w-[35px] h-[35px]">
@@ -31,11 +34,11 @@ const AchievementCard = () => {
         </div>
       </div>
       <div className="flex gap-1 ml-[90px] mb-4 font-medium text-gray-500">
-        <h3>fDAIx</h3>
+        <h3>{props.token}</h3>
         <span className="pt-[5px]">
           <BsDot />
         </span>
-        <h3>0.1/sec</h3>
+        <h3>{props.streamed} wei</h3>
       </div>
     </div>
   );

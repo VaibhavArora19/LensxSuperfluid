@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "@/context/StateContext";
 import classes from "./Modal.module.css";
+import { BsFillPeopleFill } from "react-icons/bs";
 import {
   useProfileFollowers,
   useActiveProfile,
@@ -39,6 +40,14 @@ const FollowModal = () => {
   });
   return (
     <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+      <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
+        <h2 className="pl-6 text-lg font-medium flex gap-2">
+          <span className="mt-[4px] text-[#54B435]">
+            <BsFillPeopleFill />
+          </span>{" "}
+          Followers
+        </h2>
+      </div>
       {followers?.map((pro: any) => {
         const profile = pro.wallet.defaultProfile;
         return (
@@ -153,6 +162,14 @@ const UnfollowModal = () => {
   console.log("data is", following);
   return (
     <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+      <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
+        <h2 className="pl-6 text-lg font-medium flex gap-2">
+          <span className="mt-[4px] text-[#54B435]">
+            <BsFillPeopleFill />
+          </span>{" "}
+          Following
+        </h2>
+      </div>
       {following?.map((profile: any) => {
         return (
           <div className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6">

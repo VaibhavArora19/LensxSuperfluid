@@ -37,7 +37,11 @@ const InputForm = () => {
 
   const handleReceiverAddress = async (e: any) => {
     const address = await nameToAddress(e.target.value);
-    setReceiverAddress(address as any);
+    if (!address) {
+      setReceiverAddress("");
+    } else {
+      setReceiverAddress(address as any);
+    }
   };
 
   return (

@@ -9,6 +9,7 @@ import { IpfsImage } from "react-ipfs-image";
 const Navbar = () => {
   const [username, setUsername] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [show, setShow] = useState(false);
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
 
@@ -25,6 +26,7 @@ const Navbar = () => {
   useEffect(() => {
     if (username !== "") {
       getProfileInfo();
+      setShow(true);
     }
   }, [username]);
 
@@ -74,11 +76,13 @@ const Navbar = () => {
               className="mt-1 ml-2 h-[2.2rem] w-[15rem] text-black pl-4 border-2 border-solid focus:outline-none focus:border-green-400 rounded-md"
             />
           </div>
-          {profile !== null && (
+          {show && profile != null && (
             <div
               className="z-50 absolute bg-white pt-2 ml-2 border-b-2 border-r-2 border-l-2 w-[240px] border-solid border-gray-300 rounded-md cursor-pointer"
               onClick={() => {
                 router.push(`/profile/${profile?.ownedBy}`);
+                setShow(false);
+                setUsername("");
               }}
             >
               <div className="flex gap-2 mt-[2px] mb-[4px]">
@@ -120,11 +124,19 @@ const Navbar = () => {
               Send Tokens
             </h3>
           </Link> */}
-          <Link href={`/profile/${address}`}>
-            <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
-              Profile
-            </h3>
-          </Link>
+          {address ? (
+            <Link href={`/profile/${address}`}>
+              <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
+                Profile
+              </h3>
+            </Link>
+          ) : (
+            <Link href={`/wallet`}>
+              <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
+                Profile
+              </h3>
+            </Link>
+          )}
           <Link href="/stream">
             <h3 className="cursor-pointer hover:bg-gray-200 rounded-md w-16 text-center">
               Stream

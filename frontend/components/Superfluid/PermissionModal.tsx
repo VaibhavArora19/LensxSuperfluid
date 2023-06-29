@@ -1,20 +1,22 @@
 import ModalCard from "../UI/ModalCard";
 import { TbLockAccess } from "react-icons/tb";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import {
   authorizeFullControl,
   revokeFullControl,
   createOrRevokePermission,
 } from "./SuperfluidSDK";
 import { permissions } from "@/lib/constants";
+import { AppContext } from "@/context/StateContext";
 import { nameToAddress } from "../lens/utils";
 
 const InputForm = ({ username }: { username: string }) => {
   const [permission, setPermission] = useState("");
   const [timePeriod, setTimePeriod] = useState("");
-  const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
   const flowRateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const InputForm = ({ username }: { username: string }) => {
       formattedFlowRate /= 30 * 24 * 60 * 60;
     }
 
-    if (receiverAddress == "") return;
+    const receiverAddress = profile?.ownedBy;
 
     if (permission === "grantFullControl") {
       await authorizeFullControl(receiverAddress);
@@ -85,16 +87,15 @@ const InputForm = ({ username }: { username: string }) => {
           </label>
           <input
             type="text"
-            placeholder="Operator lens username"
-            className="w-[80%] h-[47px] text-gray-500 cursor-not-allowed pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
+            value={profile?.handle}
+            className="w-[80%] text-gray-600 cursor-not-allowed h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
             disabled
-            value={username}
           />
           {receiverAddress != "" && (
             <p className="text-sm text-gray-500 mt-2 ml-2">
               {receiverAddress.substring(0, 7) +
                 "..." +
-                receiverAddress.substring(35, 43)}
+                receiverAddress.substring(37, 43)}
             </p>
           )}
         </div>

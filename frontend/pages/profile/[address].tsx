@@ -71,9 +71,7 @@ const Profile = () => {
   // const { data, error, loading } = useActiveProfile();
   const [mostStreamed, setMostStreamed] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
-  useState(() => {
-    setMounted(true);
-  });
+
   const sender = (address as any)?.toLowerCase();
   const receiver = (address as any)?.toLowerCase();
   const [result1] = useQuery({
@@ -91,8 +89,13 @@ const Profile = () => {
     setProfile(profile as any);
   }
 
+  useState(() => {
+    setMounted(true);
+  });
+
   useEffect(() => {
-    if (address) {
+    if (address !== undefined) {
+      console.log("udendf");
       getData(address as any);
     }
   }, [address]);
@@ -132,7 +135,12 @@ const Profile = () => {
 
   if (!mounted) return null;
 
-  if (data == null) return <p>Loading...</p>;
+  if (data == null)
+    return (
+      <div className="flex flex-col items-center mt-[20%]">
+        <img src="/loading.gif" className="w-8 "></img>
+      </div>
+    );
 
   // if (error) return <p>{error.message}</p>;
 

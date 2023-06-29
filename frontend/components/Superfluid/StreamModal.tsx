@@ -1,15 +1,18 @@
 import ModalCard from "../UI/ModalCard";
 import { LuWorkflow } from "react-icons/lu";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { createFlow } from "./SuperfluidSDK";
 import { useAccount } from "wagmi";
 import { nameToAddress } from "../lens/utils";
+import { AppContext } from "@/context/StateContext";
 const InputForm = ({ username }: { username: string }) => {
   const flowRateRef = useRef<HTMLInputElement>(null);
   const [timePeriod, setTimePeriod] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { address } = useAccount();
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
 
   useEffect(() => {
     async function getName() {
@@ -37,11 +40,10 @@ const InputForm = ({ username }: { username: string }) => {
     }
 
     if (!address) return;
-    if (receiverAddress == "") return;
-
+    const receiverAddress = profile?.ownedBy;
     //change receiver address later
     await createFlow(address, receiverAddress, formattedFlowRate.toString());
-    setIsProcessing(true);
+    setIsProcessing(false);
   };
 
   return (
@@ -65,11 +67,9 @@ const InputForm = ({ username }: { username: string }) => {
             </label>
             <input
               type="text"
-              placeholder="lens name"
+              value={profile?.handle}
               className="w-[80%] text-gray-500 cursor-not-allowed h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-              id="handle"
               disabled
-              value={username}
             />
             {receiverAddress != "" && (
               <p className="text-sm text-gray-500 mt-2 ml-2">

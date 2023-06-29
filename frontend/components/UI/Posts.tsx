@@ -72,7 +72,6 @@ const Posts = ({ id }: any) => {
                   <p>{(pub as any).metadata.content}</p>
                   {(pub as any).metadata.media.length > 0 &&
                     (pub as any).metadata.media.map((media: any) => {
-                      console.log(media);
                       return (
                         <IpfsImage
                           hash={media.original.url}

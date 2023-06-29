@@ -17,8 +17,7 @@ const InfoCard = ({ address }: { address: string }) => {
 
     getDetails();
   }, [address]);
-  console.log(user?.picture?.original?.url.startsWith("ipfs"));
-  console.log("user", user);
+
   return (
     <div
       className={`flex gap-2 rounded-xl ${classes.shadow} w-[220px] h-[55px] items-center mb-6`}

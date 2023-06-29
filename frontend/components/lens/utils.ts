@@ -6,7 +6,7 @@ const lensClient = new LensClient({
 
 export const nameToAddress = async (name: string) => {
   const profileByHandle = await lensClient.profile.fetch({
-    handle: name + ".test",
+    handle: name.includes(".test") ? name : name + ".test",
   });
   return profileByHandle?.ownedBy;
 };
@@ -18,7 +18,7 @@ export const addressToName = async (address: string) => {
 
   // defaultProfile is a ProfileFragment
   const defaultProfile = allOwnedProfiles.items[0];
-  return defaultProfile.handle;
+  return defaultProfile?.handle;
 };
 
 export const getProfile = async (name: string) => {

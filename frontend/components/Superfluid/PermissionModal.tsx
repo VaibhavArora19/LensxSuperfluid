@@ -1,6 +1,6 @@
 import ModalCard from "../UI/ModalCard";
 import { TbLockAccess } from "react-icons/tb";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   authorizeFullControl,
   revokeFullControl,
@@ -9,13 +9,25 @@ import {
 import { permissions } from "@/lib/constants";
 import { nameToAddress } from "../lens/utils";
 
-const InputForm = () => {
+const InputForm = ({ username }: { username: string }) => {
   const [permission, setPermission] = useState("");
   const [timePeriod, setTimePeriod] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const flowRateRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    async function getAddress() {
+      const address = await nameToAddress(username);
+
+      if (!address) return;
+
+      setReceiverAddress(address);
+    }
+
+    getAddress();
+  }, []);
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,7 +54,6 @@ const InputForm = () => {
     } else {
       //@ts-ignore
       const permissionValue = permissions[permission];
-      console.log(permissionValue);
 
       await createOrRevokePermission(
         formattedFlowRate.toString(),
@@ -52,10 +63,6 @@ const InputForm = () => {
     }
 
     setIsProcessing(false);
-  };
-  const handleReceiverAddress = async (e: any) => {
-    const address = await nameToAddress(e.target.value);
-    setReceiverAddress(address as any);
   };
 
   return (
@@ -79,8 +86,9 @@ const InputForm = () => {
           <input
             type="text"
             placeholder="Operator lens username"
-            className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-            onChange={handleReceiverAddress}
+            className="w-[80%] h-[47px] text-gray-500 cursor-not-allowed pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
+            disabled
+            value={username}
           />
           {receiverAddress != "" && (
             <p className="text-sm text-gray-500 mt-2 ml-2">
@@ -149,11 +157,11 @@ const InputForm = () => {
   );
 };
 
-const PermissionModal = () => {
+const PermissionModal = ({ username }: { username: string }) => {
   return (
     <>
       <ModalCard type="permission" />
-      <InputForm />
+      <InputForm username={username} />
     </>
   );
 };

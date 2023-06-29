@@ -48,7 +48,7 @@ const Intro = ({ data }: any) => {
             ) : (
               <img
                 src={data?.picture?.original?.url}
-                className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
+                className=" rounded-[100px] bg-gray-100 sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
               />
             )}
           </>
@@ -101,7 +101,7 @@ const Intro = ({ data }: any) => {
         </div>
       </div>
       {currentAddress &&
-        ethers.utils.getAddress(data.ownedBy) ==
+        ethers.utils.getAddress(data.ownedBy) !==
           ethers.utils.getAddress(currentAddress) && (
           <div className="flex gap-2 z-20 mt-10 ml-8 w-[10px]">
             <div onClick={showStreamModalHandler}>

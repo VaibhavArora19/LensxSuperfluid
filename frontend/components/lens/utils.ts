@@ -26,18 +26,17 @@ export const getProfile = async (name: string) => {
     handle: name + ".test",
   });
 
-  return profileByHandle
-}
+  return profileByHandle;
+};
 
 export const getProfileByAddress = async (address: string) => {
   const name = await addressToName(address);
 
-  if(!name) return undefined;
-  
-   const profileByHandle = await lensClient.profile.fetch({
+  if (!name) return undefined;
+
+  const profileByHandle = await lensClient.profile.fetch({
     handle: name,
   });
 
-  return profileByHandle
-
-}
+  return profileByHandle;
+};

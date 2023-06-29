@@ -5,6 +5,7 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { getProfile } from "../lens/utils";
 import { useRouter } from "next/router";
+import { IpfsImage } from "react-ipfs-image";
 const Navbar = () => {
   const [username, setUsername] = useState("");
   const [mounted, setMounted] = useState(false);
@@ -14,17 +15,17 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+  async function getProfileInfo() {
+    const profileInfo = await getProfile(username);
 
-  useEffect(() => {
-    async function getProfileInfo() {
-      const profileInfo = await getProfile(username);
-
-      if (profileInfo !== null) {
-        setProfile(profileInfo);
-      }
+    if (profileInfo !== null) {
+      setProfile(profileInfo);
     }
-
-    getProfileInfo();
+  }
+  useEffect(() => {
+    if (username !== "") {
+      getProfileInfo();
+    }
   }, [username]);
 
   const {
@@ -81,11 +82,26 @@ const Navbar = () => {
               }}
             >
               <div className="flex gap-2 mt-[2px] mb-[4px]">
-                <img
-                  src={profile?.picture?.original?.url}
-                  className="w-8 h-8 ml-2 rounded-full"
-                  alt="profile picture of user"
-                />
+                {profile !== null && profile?.picture?.original?.url ? (
+                  <>
+                    {profile?.picture?.original?.url.startsWith("ipfs") ? (
+                      <IpfsImage
+                        hash={profile?.picture?.original?.url}
+                        className="w-8 h-8 ml-2 rounded-full"
+                      />
+                    ) : (
+                      <img
+                        src={profile?.picture?.original?.url}
+                        className="w-8 h-8 ml-2 rounded-full"
+                      />
+                    )}
+                  </>
+                ) : (
+                  <img
+                    src="/profile.png"
+                    className="w-8 h-8 ml-2 rounded-full"
+                  />
+                )}
                 <div>
                   <h4 className="text-sm font-medium">{profile?.handle}</h4>
                   <h4 className="ml-[2px] text-[13px] font-medium">

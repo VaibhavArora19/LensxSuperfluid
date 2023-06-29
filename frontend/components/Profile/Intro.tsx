@@ -38,11 +38,20 @@ const Intro = ({ data }: any) => {
           Superfluid x Lens
         </h1>
 
-        {(data.picture as any).original.url ? (
-          <IpfsImage
-            hash={(data.picture as any).original.url}
-            className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
-          />
+        {(data.picture as any)?.original.url ? (
+          <>
+            {data?.picture?.original?.url.startsWith("ipfs") ? (
+              <IpfsImage
+                hash={data?.picture?.original?.url}
+                className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
+              />
+            ) : (
+              <img
+                src={data?.picture?.original?.url}
+                className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
+              />
+            )}
+          </>
         ) : (
           <img
             src="/profile.png"

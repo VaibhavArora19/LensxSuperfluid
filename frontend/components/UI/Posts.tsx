@@ -31,10 +31,21 @@ const Posts = ({ id }: any) => {
                 <div className="flex gap-2 ml-8 mt-8 mb-8">
                   <div>
                     {(pub.profile.picture as any).original.url ? (
-                      <IpfsImage
-                        hash={(pub.profile.picture as any).original.url}
-                        className="w-8 rounded-full mt-2"
-                      />
+                      <>
+                        {(pub.profile.picture as any).original?.url.startsWith(
+                          "ipfs"
+                        ) ? (
+                          <IpfsImage
+                            hash={(pub.profile.picture as any).original?.url}
+                            className="w-8 rounded-full mt-2"
+                          />
+                        ) : (
+                          <img
+                            src={(pub.profile.picture as any).original?.url}
+                            className="w-8 rounded-full mt-2"
+                          />
+                        )}
+                      </>
                     ) : (
                       <img
                         src="/profile.png"

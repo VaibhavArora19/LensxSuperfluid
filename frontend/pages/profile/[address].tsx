@@ -76,6 +76,7 @@ const Profile = () => {
   });
   const sender = (address as any)?.toLowerCase();
   const receiver = (address as any)?.toLowerCase();
+  console.log(sender, receiver);
   const [result1] = useQuery({
     query: sendingStreamsQuery,
     variables: { sender },
@@ -171,9 +172,9 @@ const Profile = () => {
                 />
                 <AchievementCard
                   title="Most streamed"
-                  date={mostStreamed.createdAtTimestamp}
-                  token={mostStreamed.token.symbol}
-                  streamed={mostStreamed.streamedUntilUpdatedAt}
+                  date={mostStreamed?.createdAtTimestamp}
+                  token={mostStreamed?.token.symbol}
+                  streamed={mostStreamed?.streamedUntilUpdatedAt}
                 />
               </div>
             </div>

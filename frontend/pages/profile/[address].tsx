@@ -15,7 +15,8 @@ import { useState } from "react";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import PermissionModal from "@/components/Superfluid/PermissionModal";
 import { ethers } from "ethers";
-
+import { useRouter } from "next/router";
+import { getProfileByAddress, addressToName } from "@/components/lens/utils";
 const sendingStreamsQuery = gql`
   query sendingStreamsQuery($sender: ID = "") {
     streams(where: { sender: $sender }) {
@@ -56,6 +57,9 @@ const receivingStreamsQuery = gql`
 `;
 
 const Profile = () => {
+  const router = useRouter();
+  const { address } = router.query;
+  console.log(address);
   const [allStreams, setAllStreams] = useState<any>([]);
   const [activeStreams, setActiveStreams] = useState<any>([]);
   const ctx = useContext(AppContext);
@@ -63,15 +67,15 @@ const Profile = () => {
   const unfollowModal = ctx.unfollowModal;
   const showStreamModal = ctx.showStreamModal;
   const showPermissionModal = ctx.showPermissionModal;
-  const { address } = useAccount();
-  const { data, error, loading } = useActiveProfile();
+  const [data, setData] = useState<any>(null);
+  // const { data, error, loading } = useActiveProfile();
   const [mostStreamed, setMostStreamed] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
   useState(() => {
     setMounted(true);
   });
-  const sender = address?.toLowerCase();
-  const receiver = address?.toLowerCase();
+  const sender = (address as any)?.toLowerCase();
+  const receiver = (address as any)?.toLowerCase();
   const [result1] = useQuery({
     query: sendingStreamsQuery,
     variables: { sender },
@@ -80,6 +84,18 @@ const Profile = () => {
     query: receivingStreamsQuery,
     variables: { receiver },
   });
+
+  async function getData(address: string) {
+    const profile = await getProfileByAddress(address as any);
+    console.log(profile);
+    setData(profile);
+  }
+
+  useEffect(() => {
+    if (address) {
+      getData(address as any);
+    }
+  }, [address]);
 
   useEffect(() => {
     if (result1.data !== undefined && result2.data !== undefined) {
@@ -112,13 +128,15 @@ const Profile = () => {
     }
   }, [result1.data, result2.data]);
 
+  console.log(data);
+
   if (!mounted) return null;
 
-  if (loading) return <p>Loading...</p>;
+  if (data == null) return <p>Loading...</p>;
 
-  if (error) return <p>{error.message}</p>;
+  // if (error) return <p>{error.message}</p>;
 
-  if (data === null) return <p>No active profile selected</p>;
+  // if (data === null) return <p>No active profile selected</p>;
 
   return (
     <div className="mb-[10px]">
@@ -174,7 +192,7 @@ const Profile = () => {
               return (
                 <StreamMessage
                   isActive={true}
-                  sender={address}
+                  sender={address as any}
                   createdAt={stream.createdAtTimestamp}
                   receiver={stream.receiver.id}
                   flowRate={stream.currentFlowRate}

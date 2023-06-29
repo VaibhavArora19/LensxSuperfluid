@@ -54,18 +54,28 @@ const FollowModal = () => {
           <div className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6">
             <div className="flex items-center gap-1">
               <div className="mt-2">
-                {(profile.picture as any).original.url ? (
-                  // <IpfsImage
-                  //   hash={(profile.picture as any).original.url}
-                  //   className="w-8 rounded-full"
-                  // />
-                  <IpfsImage
-                    hash={profile.picture.original.url}
-                    className="w-8 rounded-full"
-                  />
+                {(profile.picture as any)?.original.url ? (
+                  <>
+                    {profile?.picture?.original?.url.startsWith("ipfs") ? (
+                      <IpfsImage
+                        hash={profile?.picture?.original?.url}
+                        className="w-8 rounded-full"
+                      />
+                    ) : (
+                      <img
+                        src={profile?.picture?.original?.url}
+                        className="w-8 rounded-full"
+                      />
+                    )}
+                  </>
                 ) : (
                   <img src="/profile.png" className="w-8 rounded-full" />
                 )}
+                {/* {(profile.picture as any).original.url ? (
+                  <IpfsImage hash={profile.picture.original.url} />
+                ) : (
+                  <img src="/profile.png" className="w-8 rounded-full" />
+                )} */}
               </div>
               <div className="ml-[10px] mt-2 font-medium">
                 <h2 className={`text-[1rem]`}>

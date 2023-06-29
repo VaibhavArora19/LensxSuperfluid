@@ -17,7 +17,7 @@ const InfoCard = ({ address }: { address: string }) => {
 
     getDetails();
   }, [address]);
-
+  console.log(user?.picture?.original?.url.startsWith("ipfs"));
   console.log("user", user);
   return (
     <div
@@ -25,10 +25,19 @@ const InfoCard = ({ address }: { address: string }) => {
     >
       <div className=" ml-2">
         {user !== null && user?.picture?.original?.url ? (
-          <IpfsImage
-            hash={user?.picture?.original?.url}
-            className="rounded-lg w-9 h-9"
-          />
+          <>
+            {user?.picture?.original?.url.startsWith("ipfs") ? (
+              <IpfsImage
+                hash={user?.picture?.original?.url}
+                className="rounded-lg w-9 h-9"
+              />
+            ) : (
+              <img
+                src={user?.picture?.original?.url}
+                className="rounded-lg w-9 h-9"
+              />
+            )}
+          </>
         ) : (
           <img src="/profile.png" className="rounded-lg w-9 h-9" />
         )}

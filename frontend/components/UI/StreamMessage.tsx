@@ -74,7 +74,7 @@ const StreamMessage = (props: Iprops) => {
           </div>
           <InfoCard address={props.receiver} />
         </div>
-        <div className="ml-10 mt-2 font-medium text-4xl mb-6 text-gray-700">
+        <div className="ml-10 mt-[12px] font-small text-[25px] mb-6 text-gray-700">
           {props.isActive ? (
             <CountUp
               start={props.balance}

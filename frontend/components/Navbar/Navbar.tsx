@@ -25,6 +25,8 @@ const Navbar = () => {
   useEffect(() => {
     if (username !== "") {
       getProfileInfo();
+    } else {
+      setProfile(null);
     }
   }, [username]);
 

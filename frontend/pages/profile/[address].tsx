@@ -116,13 +116,14 @@ const Profile = () => {
       );
 
       let streamed;
-      let flowRate = 0;
+      let flowRate = -1;
       for (const stream of sortedStreams) {
         if (stream.streamedUntilUpdatedAt > flowRate) {
           streamed = stream;
           flowRate = stream.streamedUntilUpdatedAt;
         }
       }
+      console.log("all", allStreams);
       setMostStreamed(streamed);
       setAllStreams(sortedStreams);
       setActiveStreams(activeStreamsData);
@@ -193,7 +194,7 @@ const Profile = () => {
               return (
                 <StreamMessage
                   isActive={true}
-                  sender={address as any}
+                  sender={stream?.sender?.id || (address as any)}
                   createdAt={stream.createdAtTimestamp}
                   receiver={stream.receiver.id}
                   flowRate={stream.currentFlowRate}

@@ -1,15 +1,18 @@
 import ModalCard from "../UI/ModalCard";
 import { LuWorkflow } from "react-icons/lu";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import { createFlow } from "./SuperfluidSDK";
 import { useAccount } from "wagmi";
 import { nameToAddress } from "../lens/utils";
+import { AppContext } from "@/context/StateContext";
+
 const InputForm = () => {
   const flowRateRef = useRef<HTMLInputElement>(null);
   const [timePeriod, setTimePeriod] = useState("");
-  const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { address } = useAccount();
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,20 +31,10 @@ const InputForm = () => {
     }
 
     if (!address) return;
-    if (receiverAddress == "") return;
-
+    const receiverAddress = profile?.ownedBy;
     //change receiver address later
     await createFlow(address, receiverAddress, formattedFlowRate.toString());
-    setIsProcessing(true);
-  };
-
-  const handleReceiverAddress = async (e: any) => {
-    const address = await nameToAddress(e.target.value);
-    if (!address) {
-      setReceiverAddress("");
-    } else {
-      setReceiverAddress(address as any);
-    }
+    setIsProcessing(false);
   };
 
   return (
@@ -65,20 +58,10 @@ const InputForm = () => {
             </label>
             <input
               type="text"
-              placeholder="lens name"
+              value={profile?.handle}
               className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-              id="handle"
-              onChange={(e) => {
-                handleReceiverAddress(e);
-              }}
+              disabled
             />
-            {receiverAddress != "" && (
-              <p className="text-sm text-gray-500 mt-2 ml-2">
-                {receiverAddress.substring(0, 7) +
-                  "..." +
-                  receiverAddress.substring(37, 43)}
-              </p>
-            )}
           </div>
           <div className="ml-6 mt-6">
             <label className="block">

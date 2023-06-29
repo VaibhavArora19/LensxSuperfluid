@@ -1,20 +1,21 @@
 import ModalCard from "../UI/ModalCard";
 import { TbLockAccess } from "react-icons/tb";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
+
 import {
   authorizeFullControl,
   revokeFullControl,
   createOrRevokePermission,
 } from "./SuperfluidSDK";
 import { permissions } from "@/lib/constants";
-import { nameToAddress } from "../lens/utils";
+import { AppContext } from "@/context/StateContext";
 
 const InputForm = () => {
   const [permission, setPermission] = useState("");
   const [timePeriod, setTimePeriod] = useState("");
-  const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
+  const ctx = useContext(AppContext);
+  const profile = ctx.profile;
   const flowRateRef = useRef<HTMLInputElement>(null);
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +34,7 @@ const InputForm = () => {
       formattedFlowRate /= 30 * 24 * 60 * 60;
     }
 
-    if (receiverAddress == "") return;
+    const receiverAddress = profile?.ownedBy;
 
     if (permission === "grantFullControl") {
       await authorizeFullControl(receiverAddress);
@@ -52,10 +53,6 @@ const InputForm = () => {
     }
 
     setIsProcessing(false);
-  };
-  const handleReceiverAddress = async (e: any) => {
-    const address = await nameToAddress(e.target.value);
-    setReceiverAddress(address as any);
   };
 
   return (
@@ -78,17 +75,10 @@ const InputForm = () => {
           </label>
           <input
             type="text"
-            placeholder="Operator lens username"
+            value={profile?.handle}
             className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
-            onChange={handleReceiverAddress}
+            disabled
           />
-          {receiverAddress != "" && (
-            <p className="text-sm text-gray-500 mt-2 ml-2">
-              {receiverAddress.substring(0, 7) +
-                "..." +
-                receiverAddress.substring(35, 43)}
-            </p>
-          )}
         </div>
         <div className="ml-6 mt-6">
           <label className="block">

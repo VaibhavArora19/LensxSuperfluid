@@ -101,7 +101,7 @@ const Intro = ({ data }: any) => {
         </div>
       </div>
       {currentAddress &&
-        ethers.utils.getAddress(data.ownedBy) ==
+        ethers.utils.getAddress(data.ownedBy) !==
           ethers.utils.getAddress(currentAddress) && (
           <div className="flex gap-2 z-20 mt-10 ml-8 w-[10px]">
             <div onClick={showStreamModalHandler}>

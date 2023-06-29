@@ -177,7 +177,7 @@ const UnfollowModal = () => {
           <div className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6">
             <div className="flex items-center gap-1">
               <div className="mt-2">
-                {(profile.profile.picture as any).original.url ? (
+                {(profile.profile.picture as any)?.original.url ? (
                   <img
                     src={(profile.profile.picture as any).original.url}
                     className="w-8 rounded-full"

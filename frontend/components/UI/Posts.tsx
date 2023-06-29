@@ -2,16 +2,8 @@ import classes from "../Profile/Intro.module.css";
 import { usePublications } from "@lens-protocol/react-web";
 import { IpfsImage } from "react-ipfs-image";
 
-const Posts = ({ id }: any) => {
-  const {
-    data: publication,
-    loading,
-    hasMore,
-    next,
-  } = usePublications({
-    profileId: id,
-    limit: 10,
-  });
+const Posts = ({ publication }: any) => {
+  console.log(publication);
 
   const convertDate = (date: any) => {
     const timestamp = date;
@@ -24,7 +16,7 @@ const Posts = ({ id }: any) => {
   return (
     <>
       {publication &&
-        publication.map((pub) => {
+        publication.map((pub: any) => {
           if ((pub as any).metadata.content.includes("#superfluid")) {
             return (
               <div className="border-2 border-solid rounded-lg border-gray-200 w-[88%] mb-2">

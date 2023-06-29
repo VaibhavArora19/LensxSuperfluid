@@ -1,5 +1,4 @@
 "use client";
-
 import Calendar from "@/components/Calendar/Calendar";
 import Intro from "@/components/Profile/Intro";
 import Posts from "@/components/UI/Posts";
@@ -12,7 +11,7 @@ import StreamModal from "@/components/Superfluid/StreamModal";
 import AchievementCard from "@/components/UI/AchievementCard";
 import { useAccount } from "wagmi";
 import { useState } from "react";
-import { useActiveProfile } from "@lens-protocol/react-web";
+import { usePublications } from "@lens-protocol/react-web";
 import PermissionModal from "@/components/Superfluid/PermissionModal";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
@@ -134,6 +133,15 @@ const Profile = () => {
   }, [result1.data, result2.data]);
 
   console.log(data);
+  const {
+    data: publication,
+    loading,
+    hasMore,
+    next,
+  } = usePublications({
+    profileId: data?.id,
+    limit: 10,
+  });
 
   if (!mounted) return null;
 
@@ -154,22 +162,28 @@ const Profile = () => {
       {(ctx as any).page === "Home" ? (
         <div className="relative bottom-[110px] -z-10">
           <div className="ml-[1rem]">
-            {allStreams.length > 0 && <Calendar data={allStreams} />}
+            {allStreams.length > 0 && (
+              <Calendar data={allStreams} handle={data?.handle} />
+            )}
           </div>
           {/* <div className="ml-[32rem]">
             <StreamBar />
           </div> */}
-          <div className="ml-[32rem] mt-[2rem]">
+          <div className="ml-[30.5rem] mt-[1rem]">
             <h2 className="text-xl font-semibold ml-[1rem] mb-6">
               Super posts
             </h2>
-            <Posts id={data.id} />
+            {publication && publication?.length ? (
+              <div className="ml-[1rem]">
+                <Posts publication={publication} />
+              </div>
+            ) : (
+              <div className="ml-[1.1rem]">No super posts yet</div>
+            )}
           </div>
           {allStreams.length > 0 && (
-            <div className="ml-[32rem] mt-[4rem]">
-              <h2 className="text-xl font-semibold ml-[1rem] mb-6">
-                Achievements
-              </h2>
+            <div className="ml-[31.5rem] mt-[4rem]">
+              <h2 className="text-xl font-semibold mb-6">Achievements</h2>
               <div className="grid grid-cols-2">
                 <AchievementCard
                   title="First superfluid stream"

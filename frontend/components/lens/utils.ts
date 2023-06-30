@@ -44,7 +44,7 @@ export const getProfileByAddress = async (address: string) => {
 
 export const getPublications = async () => {
   const result = await lensClient.publication.fetchAll({
-    profileIds: ["0x76cd", "0x15"],
+    profileIds: ["0x76cd", "0x15", "0x86f1"],
     publicationTypes: [PublicationTypes.Post],
     limit: 50,
   });

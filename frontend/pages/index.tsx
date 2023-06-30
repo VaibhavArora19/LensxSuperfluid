@@ -17,7 +17,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col mx-20 mt-5">
+    <div className="flex flex-col mx-24 mt-5">
+      <h3 className="font-semibold text-[22px] mb-6 mt-2">
+        Streamoor's Feed 🌊
+      </h3>
       {publication && <Posts publication={publication} />}
     </div>
   );

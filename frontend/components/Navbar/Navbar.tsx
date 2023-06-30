@@ -30,6 +30,8 @@ const Navbar = () => {
   useEffect(() => {
     if (username !== "") {
       getProfileInfo();
+    } else {
+      setProfile(null);
       setShow(true);
     }
   }, [username]);
@@ -84,6 +86,7 @@ const Navbar = () => {
             <div
               className="z-50 absolute bg-white pt-2 ml-2 border-b-2 border-r-2 border-l-2 w-[240px] border-solid border-gray-300 rounded-md cursor-pointer"
               onClick={() => {
+                setUsername("");
                 router.push(`/profile/${profile?.ownedBy}`);
                 setShow(false);
                 setUsername("");

@@ -7,7 +7,7 @@ const lensClient = new LensClient({
 
 export const nameToAddress = async (name: string) => {
   const profileByHandle = await lensClient.profile.fetch({
-    handle: name + ".test",
+    handle: name.includes(".test") ? name : name + ".test",
   });
   return profileByHandle?.ownedBy;
 };

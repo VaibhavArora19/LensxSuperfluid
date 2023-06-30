@@ -1,18 +1,27 @@
 import ModalCard from "../UI/ModalCard";
 import { LuWorkflow } from "react-icons/lu";
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { createFlow } from "./SuperfluidSDK";
 import { useAccount } from "wagmi";
 import { nameToAddress } from "../lens/utils";
 import { AppContext } from "@/context/StateContext";
-
-const InputForm = () => {
+const InputForm = ({ username }: { username: string }) => {
   const flowRateRef = useRef<HTMLInputElement>(null);
   const [timePeriod, setTimePeriod] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { address } = useAccount();
   const ctx = useContext(AppContext);
   const profile = ctx.profile;
+
+  useEffect(() => {
+    async function getName() {
+      const address = await nameToAddress(username);
+      if (!address) return;
+      setReceiverAddress(address);
+    }
+    getName();
+  }, []);
 
   const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +49,7 @@ const InputForm = () => {
   return (
     <div className="w-[40%] h-[75%] bg-white rounded-xl fixed top-[10%] right-0 left-[30%] bottom-0 z-20">
       <div
-        className=" pl-4 pb-2
+        className=" pl-8 pb-2
        w-[100%] mt-4 border-b-2 border-solid border-gray-300 text-[20px] font-medium"
       >
         <h1 className="flex gap-2">
@@ -59,9 +68,16 @@ const InputForm = () => {
             <input
               type="text"
               value={profile?.handle}
-              className="w-[80%] h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
+              className="w-[80%] text-gray-500 cursor-not-allowed h-[47px] pl-2 border-2 border-solid focus:outline-none border-gray-300 rounded-lg"
               disabled
             />
+            {receiverAddress != "" && (
+              <p className="text-sm text-gray-500 mt-2 ml-2">
+                {receiverAddress.substring(0, 7) +
+                  "..." +
+                  receiverAddress.substring(37, 43)}
+              </p>
+            )}
           </div>
           <div className="ml-6 mt-6">
             <label className="block">
@@ -109,11 +125,11 @@ const InputForm = () => {
   );
 };
 
-const StreamModal = () => {
+const StreamModal = ({ username }: { username: string }) => {
   return (
     <>
       <ModalCard type="stream" />
-      <InputForm />
+      <InputForm username={username} />
     </>
   );
 };

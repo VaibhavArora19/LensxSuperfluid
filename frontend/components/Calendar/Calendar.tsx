@@ -27,8 +27,6 @@ const Calendar = (props: any) => {
     setData(arrangedData);
   }, [props.data]);
 
-  console.log("data", data);
-
   return (
     <div className="overflow-hidden mt-2">
       <h1 className="ml-[30.5rem] font-semibold text-xl">

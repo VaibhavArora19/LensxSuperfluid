@@ -58,7 +58,6 @@ const receivingStreamsQuery = gql`
 const Profile = () => {
   const router = useRouter();
   const { address } = router.query;
-  console.log(address);
   const [allStreams, setAllStreams] = useState<any>([]);
   const [activeStreams, setActiveStreams] = useState<any>([]);
   const ctx = useContext(AppContext);
@@ -85,7 +84,6 @@ const Profile = () => {
 
   async function getData(address: string) {
     const profile = await getProfileByAddress(address as any);
-    console.log(profile);
     setData(profile);
     setProfile(profile as any);
   }
@@ -102,7 +100,9 @@ const Profile = () => {
   }, [address]);
 
   useEffect(() => {
+    console.log(result1.data);
     if (result1.data !== undefined && result2.data !== undefined) {
+      console.log("mounted");
       let sortedStreams = [...result1.data.streams, ...result2.data.streams];
 
       sortedStreams.forEach((stream) => {
@@ -119,7 +119,7 @@ const Profile = () => {
       );
 
       let streamed;
-      let flowRate = 0;
+      let flowRate = -1;
       for (const stream of sortedStreams) {
         if (stream.streamedUntilUpdatedAt > flowRate) {
           streamed = stream;
@@ -216,7 +216,7 @@ const Profile = () => {
               return (
                 <StreamMessage
                   isActive={true}
-                  sender={address as any}
+                  sender={stream?.sender?.id || (address as any)}
                   createdAt={stream.createdAtTimestamp}
                   receiver={stream.receiver.id}
                   flowRate={stream.currentFlowRate}
@@ -251,8 +251,8 @@ const Profile = () => {
       )}
       {followModal && <Modal />}
       {unfollowModal && <Modal />}
-      {showStreamModal && <StreamModal />}
-      {showPermissionModal && <PermissionModal />}
+      {showStreamModal && <StreamModal username={data.handle} />}
+      {showPermissionModal && <PermissionModal username={data.handle} />}
     </div>
   );
 };

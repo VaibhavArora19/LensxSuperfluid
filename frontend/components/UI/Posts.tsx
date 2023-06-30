@@ -16,8 +16,8 @@ const Posts = ({ publication }: any) => {
   return (
     <>
       {publication &&
-        publication.map((pub: any) => {
-          if ((pub as any).metadata.content.includes("#superfluid")) {
+        publication.map((pub) => {
+          if ((pub as any)?.metadata?.content.includes("#superfluid")) {
             return (
               <div className="border-2 border-solid rounded-lg border-gray-200 w-[88%] mb-2">
                 <div className="flex gap-2 ml-8 mt-8 mb-8">
@@ -64,7 +64,6 @@ const Posts = ({ publication }: any) => {
                   <p>{(pub as any).metadata.content}</p>
                   {(pub as any).metadata.media.length > 0 &&
                     (pub as any).metadata.media.map((media: any) => {
-                      console.log(media);
                       return (
                         <IpfsImage
                           hash={media.original.url}

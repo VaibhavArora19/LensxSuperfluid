@@ -10,9 +10,11 @@ import {
   useFollow,
 } from "@lens-protocol/react-web";
 import { IpfsImage } from "react-ipfs-image";
+import { useRouter } from "next/router";
 
 const Backdrop = () => {
   const ctx = useContext(AppContext);
+  const router = useRouter();
   return (
     <>
       <div
@@ -28,6 +30,7 @@ const Backdrop = () => {
 };
 
 const FollowModal = () => {
+  const router = useRouter();
   const ctx = useContext(AppContext);
   const profile = ctx.profile;
   const {
@@ -40,7 +43,7 @@ const FollowModal = () => {
     limit: 10,
   });
   return (
-    <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+    <div className="w-[30%] fixed overflow-y-scroll flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
       <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
         <h2 className="pl-6 text-lg font-medium flex gap-2">
           <span className="mt-[4px] text-[#54B435]">
@@ -52,7 +55,13 @@ const FollowModal = () => {
       {followers?.map((pro: any) => {
         const profile = pro.wallet.defaultProfile;
         return (
-          <div className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6">
+          <div
+            className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6"
+            onClick={() => {
+              router.push(`/profile/${profile.ownedBy}`);
+              ctx.followModalHandler();
+            }}
+          >
             <div className="flex items-center gap-1">
               <div className="mt-2">
                 {(profile.picture as any)?.original.url ? (
@@ -125,8 +134,6 @@ function UnfollowProfile({ profile }: any) {
 function FollowProfile({ profile }: any) {
   const ctx = useContext(AppContext);
   const pro = ctx.profile;
-  console.log("profile is", profile);
-  console.log("pro is", pro);
   const { execute: follow, isPending } = useFollow({
     followee: profile,
     follower: pro,
@@ -148,6 +155,7 @@ function FollowProfile({ profile }: any) {
 }
 
 const UnfollowModal = () => {
+  const router = useRouter();
   const ctx = useContext(AppContext);
   const profile = ctx.profile;
 
@@ -161,9 +169,8 @@ const UnfollowModal = () => {
     limit: 10,
   });
 
-  console.log("data is", following);
   return (
-    <div className="w-[30%] fixed flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
+    <div className="w-[30%] fixed overflow-y-scroll flex flex-col top-[10%] right-0 left-[35%] bottom-0 z-20 h-[80%] bg-white rounded-lg">
       <div className="mb-2 pb-2 border-b-2 border-solid border-gray-300 mt-4">
         <h2 className="pl-6 text-lg font-medium flex gap-2">
           <span className="mt-[4px] text-[#54B435]">
@@ -174,7 +181,13 @@ const UnfollowModal = () => {
       </div>
       {following?.map((profile: any) => {
         return (
-          <div className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6">
+          <div
+            className="flex gap-2 cursor-pointer py-2 border-b-2 border-solid border-gray-200 items-center justify-between px-6"
+            onClick={() => {
+              router.push(`/profile/${profile.profile.ownedBy}`);
+              ctx.unfollowModalHandler();
+            }}
+          >
             <div className="flex items-center gap-1">
               <div className="mt-2">
                 {(profile.profile.picture as any)?.original.url ? (

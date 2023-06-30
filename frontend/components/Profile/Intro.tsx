@@ -43,12 +43,12 @@ const Intro = ({ data }: any) => {
             {data?.picture?.original?.url.startsWith("ipfs") ? (
               <IpfsImage
                 hash={data?.picture?.original?.url}
-                className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
+                className=" rounded-[100px] bg-white sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
               />
             ) : (
               <img
                 src={data?.picture?.original?.url}
-                className=" rounded-[100px] sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
+                className=" rounded-[100px] bg-white sticky h-[13rem] w-[13rem] mt-[50px] ml-24 border-8 border-solid border-white"
               />
             )}
           </>

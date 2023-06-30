@@ -14,7 +14,7 @@ const Option = ({ title }: any) => {
 
   return (
     <div
-      className={`w-[155px] h-[35px] rounded-md text-center cursor-pointer hover:bg-green-100 ${
+      className={`w-[170px] h-[35px] rounded-md text-center cursor-pointer hover:bg-green-100 ${
         ctx.page === title && "bg-green-100 text-green-800"
       }`}
       onClick={changeOptionHandler}

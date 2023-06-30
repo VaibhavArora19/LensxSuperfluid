@@ -17,10 +17,14 @@ const Navbar = () => {
     setMounted(true);
   }, []);
   async function getProfileInfo() {
-    const profileInfo = await getProfile(username);
+    try {
+      const profileInfo = await getProfile(username);
 
-    if (profileInfo !== null) {
-      setProfile(profileInfo);
+      if (profileInfo !== null) {
+        setProfile(profileInfo);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   useEffect(() => {

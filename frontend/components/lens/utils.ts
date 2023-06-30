@@ -1,5 +1,6 @@
 import { LensClient, development } from "@lens-protocol/client";
-
+import { Post } from "@lens-protocol/react-web";
+import { PublicationTypes } from "@lens-protocol/client";
 const lensClient = new LensClient({
   environment: development,
 });
@@ -39,4 +40,13 @@ export const getProfileByAddress = async (address: string) => {
   });
 
   return profileByHandle;
+};
+
+export const getPublications = async () => {
+  const result = await lensClient.publication.fetchAll({
+    profileIds: ["0x76cd", "0x15"],
+    publicationTypes: [PublicationTypes.Post],
+    limit: 50,
+  });
+  return result.items;
 };

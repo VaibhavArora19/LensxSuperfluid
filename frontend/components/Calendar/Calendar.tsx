@@ -28,9 +28,10 @@ const Calendar = (props: any) => {
   }, [props.data]);
 
   return (
-    <div className="overflow-hidden">
-      <h1 className="ml-[32rem] font-semibold text-xl">
-        You streamed for a total of {data.length} times
+    <div className="overflow-hidden mt-2">
+      <h1 className="ml-[30.5rem] font-semibold text-xl">
+        Streamed for a total of {data.length}{" "}
+        {data.length > 1 ? "times" : "time"}
       </h1>
       {data.length > 0 && (
         <div className="h-[12.5rem] ml-[11rem] mt-2 w-[95rem]">

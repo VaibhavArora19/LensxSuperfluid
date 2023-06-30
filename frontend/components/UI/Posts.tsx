@@ -2,16 +2,8 @@ import classes from "../Profile/Intro.module.css";
 import { usePublications } from "@lens-protocol/react-web";
 import { IpfsImage } from "react-ipfs-image";
 
-const Posts = ({ id }: any) => {
-  const {
-    data: publication,
-    loading,
-    hasMore,
-    next,
-  } = usePublications({
-    profileId: id,
-    limit: 10,
-  });
+const Posts = ({ publication }: any) => {
+  console.log(publication);
 
   const convertDate = (date: any) => {
     const timestamp = date;

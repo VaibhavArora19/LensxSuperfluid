@@ -150,11 +150,10 @@ const Stream = () => {
             </div>
           </div>
         </div>
-        <div>
-          <button className="mt-10 w-[80%] h-[50px] rounded-xl bg-[#54B435] text-white">
-            Start Streaming
-          </button>
-        </div>
+
+        <button className="mt-10 w-[80%] h-[50px] rounded-xl bg-[#54B435] text-white">
+          Start Streaming
+        </button>
       </form>
     </div>
   );
